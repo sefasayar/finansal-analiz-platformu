@@ -40,6 +40,16 @@ nav ul li a {
     text-decoration: none;
     border-radius: 5px;
     margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #1f6391;
+}
+
+#about {
+    padding: 50px 20px;
+    text-align: center;
 }
 
 #packages {
@@ -54,6 +64,12 @@ nav ul li a {
     display: inline-block;
     width: 250px;
     border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.package:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 footer {
@@ -68,19 +84,29 @@ footer {
 
 /* Kayıt ve Giriş Formları için Stiller */
 #auth-forms {
-    padding: 50px 20px;
-    text-align: center;
+    display: none; /* Hidden by default */
+    position: fixed; /* Make it appear as a modal */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
 }
 
-#auth-forms form {
-    display: inline-block;
-    text-align: left;
-    margin-top: 20px;
+.form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 #auth-forms label {
     display: block;
     margin-bottom: 5px;
+    font-weight: bold;
 }
 
 #auth-forms input {
@@ -88,6 +114,8 @@ footer {
     padding: 8px;
     margin-bottom: 15px;
     box-sizing: border-box;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
 }
 
 #auth-forms button {
@@ -98,6 +126,7 @@ footer {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 #auth-forms button:hover {
