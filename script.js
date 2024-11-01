@@ -83,10 +83,10 @@ async function subscribeUser(planId) {
 }
 
 // Güçlü Al ve Güçlü Sat Önerilerini Görselleştirme Fonksiyonu
-async function displayRecommendations(symbol) {
+async function displayRecommendations(market) {
     try {
         // Serverless fonksiyonunu çağırarak analiz verilerini çekme
-        const response = await fetch(`/api/analyzeMarket?symbol=${symbol}`, {
+        const response = await fetch(`/api/analyzeMarket?market=${market}`, {
             method: 'GET',
         });
 
@@ -102,59 +102,47 @@ async function displayRecommendations(symbol) {
         const recommendationsDiv = document.getElementById('recommendations');
         recommendationsDiv.innerHTML = '';
 
-        // Eğer "Strong Buy" veya "Strong Sell" önerisi varsa göster
-        if (result.recommendation === 'Strong Buy' || result.recommendation === 'Strong Sell') {
-            const recommendationCard = document.createElement('div');
-            recommendationCard.classList.add('recommendation-card');
-
-            if (result.recommendation === 'Strong Buy') {
-                recommendationCard.classList.add('strong-buy');
-            } else if (result.recommendation === 'Strong Sell') {
-                recommendationCard.classList.add('strong-sell');
-            }
-
-            recommendationCard.innerHTML = `
-                <h3>${result.recommendation} Önerisi</h3>
-                <p>Hisse Senedi: ${result.symbol}</p>
-                <p>RSI: ${result.rsi.toFixed(2)}</p>
-                <p>Duygu Skoru: ${result.sentiment_score.toFixed(2)}</p>
-            `;
-
-            recommendationsDiv.appendChild(recommendationCard);
+        if (result.analysis.length === 0) {
+            recommendationsDiv.innerHTML = '<p>Seçilen market için analiz bulunamadı.</p>';
         } else {
-            recommendationsDiv.innerHTML = '<p>Şu anda güçlü al veya güçlü sat önerisi yok.</p>';
+            result.analysis.forEach(pair => {
+                if (pair.recommendation === 'Strong Buy' || pair.recommendation === 'Strong Sell') {
+                    const recommendationCard = document.createElement('div');
+                    recommendationCard.classList.add('recommendation-card');
+
+                    if (pair.recommendation === 'Strong Buy') {
+                        recommendationCard.classList.add('strong-buy');
+                    } else if (pair.recommendation === 'Strong Sell') {
+                        recommendationCard.classList.add('strong-sell');
+                    }
+
+                    recommendationCard.innerHTML = `
+                        <h3>${pair.recommendation} Önerisi</h3>
+                        <p>Parite: ${pair.symbol}</p>
+                        <p>RSI: ${pair.rsi.toFixed(2)}</p>
+                        <p>Duygu Skoru: ${pair.sentiment_score.toFixed(2)}</p>
+                    `;
+
+                    recommendationsDiv.appendChild(recommendationCard);
+                }
+            });
+
+            // Eğer hiç sinyal yoksa
+            if (!result.analysis.some(pair => pair.recommendation === 'Strong Buy' || pair.recommendation === 'Strong Sell')) {
+                recommendationsDiv.innerHTML = '<p>Şu anda güçlü al veya güçlü sat önerisi yok.</p>';
+            }
         }
 
-        // Supabase'ten teknik analiz verilerini çekme
-        const { data: stockData, error: stockError } = await supabaseClient
-            .from('stocks')
-            .select('*')
-            .eq('symbol', symbol)
-            .single();
-
-        if (stockError) {
-            throw stockError;
-        }
-
-        const { data: analysisList, error: analysisError } = await supabaseClient
-            .from('stock_analysis')
-            .select('*')
-            .eq('stock_id', stockData.id)
-            .order('date', { ascending: true });
-
-        if (analysisError) {
-            throw analysisError;
-        }
-
-        if (analysisList.length === 0) {
-            alert('Analiz verisi bulunamadı.');
-            return;
-        }
-
-        // RSI ve diğer verileri grafiğe hazırlama
-        const dates = analysisList.map(item => item.date);
-        const rsiValues = analysisList.map(item => item.rsi);
-        const sentimentScores = analysisList.map(item => item.sentiment_score);
+        // Grafik için verileri toplama
+        const chartData = {};
+        result.analysis.forEach(pair => {
+            if (!chartData[pair.symbol]) {
+                chartData[pair.symbol] = { dates: [], rsi: [], sentiment: [] };
+            }
+            chartData[pair.symbol].dates.push(pair.date);
+            chartData[pair.symbol].rsi.push(pair.rsi);
+            chartData[pair.symbol].sentiment.push(pair.sentiment_score);
+        });
 
         // Chart.js ile grafik oluşturma
         const ctx = document.getElementById('stockChart').getContext('2d');
@@ -162,28 +150,32 @@ async function displayRecommendations(symbol) {
         if (window.stockChartInstance) {
             window.stockChartInstance.destroy();
         }
+
+        const datasets = [];
+        Object.keys(chartData).forEach(symbol => {
+            datasets.push({
+                label: `${symbol} RSI`,
+                data: chartData[symbol].rsi,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                fill: true,
+            });
+            datasets.push({
+                label: `${symbol} Duygu Skoru`,
+                data: chartData[symbol].sentiment,
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1,
+                fill: true,
+            });
+        });
+
         window.stockChartInstance = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: dates,
-                datasets: [
-                    {
-                        label: 'RSI Değerleri',
-                        data: rsiValues,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1,
-                        fill: true,
-                    },
-                    {
-                        label: 'Duygu Skoru',
-                        data: sentimentScores,
-                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                        borderColor: 'rgba(153, 102, 255, 1)',
-                        borderWidth: 1,
-                        fill: true,
-                    }
-                ]
+                labels: result.analysis.length > 0 ? result.analysis.map(pair => pair.date) : [],
+                datasets: datasets
             },
             options: {
                 responsive: true,
@@ -308,9 +300,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Market Dropdown Event Listener
     const marketDropdown = document.getElementById('market-dropdown');
     marketDropdown.addEventListener('change', () => {
-        const selectedSymbol = marketDropdown.value;
-        if (selectedSymbol) {
-            displayRecommendations(selectedSymbol);
+        const selectedMarket = marketDropdown.value;
+        if (selectedMarket) {
+            displayRecommendations(selectedMarket);
         } else {
             // Clear recommendations and chart
             const recommendationsDiv = document.getElementById('recommendations');
