@@ -10,5 +10,8 @@
     "@supabase/supabase-js": "^2.0.0",
     "node-fetch": "^2.6.1",
     "technicalindicators": "^3.0.0"
+  },
+  "devDependencies": {
+    "vercel": "^28.0.0" // Eğer build ve start script'lerinde vercel komutunu kullanıyorsanız
   }
 }
