@@ -2,16 +2,14 @@
   "name": "finansal-analiz-platformu",
   "version": "1.0.0",
   "scripts": {
-    "dev": "vercel dev",
+    "dev": "echo 'No dev script needed for static site'",
     "build": "echo 'No build step required'",
-    "start": "vercel start"
+    "start": "echo 'No start script needed for static site'"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0",
     "node-fetch": "^2.6.1",
     "technicalindicators": "^3.0.0"
   },
-  "devDependencies": {
-    "vercel": "^28.0.0"
-  }
+  "devDependencies": {}
 }
