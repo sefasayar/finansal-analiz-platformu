@@ -65,3 +65,41 @@ footer {
     width: 100%;
     bottom: 0;
 }
+
+/* Kayıt ve Giriş Formları için Stiller */
+#auth-forms {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+#auth-forms form {
+    display: inline-block;
+    text-align: left;
+    margin-top: 20px;
+}
+
+#auth-forms label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#auth-forms input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+#auth-forms button {
+    width: 100%;
+    padding: 10px;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#auth-forms button:hover {
+    background-color: #219150;
+}
