@@ -1,8 +1,8 @@
 // script.js
 
 // Supabase bağlantısı
-const supabaseUrl = 'https://YOUR_SUPABASE_URL.supabase.co'; // Supabase URL'nizi buraya ekleyin
-const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Supabase Anon Key'inizi buraya ekleyin
+const supabaseUrl = 'https://neijkzbyyqtwpmsvymip.supabase.co'; // Supabase URL'nizi buraya ekleyin
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laWpremJ5eXF0d3Btc3Z5bWlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA0NjY2NjAsImV4cCI6MjA0NjA0MjY2MH0.JiDT3kT_Ror6-AWFKTo9JJBQUC_ZQTPXOYJNpBlaaxQ'; // Supabase Anon Key'inizi buraya ekleyin
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 console.log('Supabase Client Oluşturuldu:', supabaseClient);
