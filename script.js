@@ -41,7 +41,16 @@ async function signIn(email, password) {
 
 // Abonelik Satın Alma Fonksiyonu
 async function subscribeUser(planId) {
-    const user = supabaseClient.auth.user();
+    console.log('Abonelik Satın Alma Fonksiyonu Çalıştırılıyor...');
+    const { data, error } = await supabaseClient.auth.getUser();
+
+    if (error) {
+        console.error('Kullanıcı Bilgisi Alınamadı:', error.message);
+        alert('Kullanıcı bilgisi alınamadı: ' + error.message);
+        return;
+    }
+
+    const user = data.user;
 
     if (!user) {
         console.error('Kullanıcı giriş yapmamış.');
@@ -58,14 +67,14 @@ async function subscribeUser(planId) {
             body: JSON.stringify({ userId: user.id, planId: planId }),
         });
 
-        const data = await response.json();
+        const responseData = await response.json();
 
         if (response.ok) {
-            console.log('Abonelik Başarıyla Alındı:', data);
+            console.log('Abonelik Başarıyla Alındı:', responseData);
             alert('Abonelik Başarıyla Alındı!');
         } else {
-            console.error('Abonelik Satın Alma Hatası:', data.message);
-            alert('Abonelik Satın Alma Hatası: ' + data.message);
+            console.error('Abonelik Satın Alma Hatası:', responseData.message);
+            alert('Abonelik Satın Alma Hatası: ' + responseData.message);
         }
     } catch (error) {
         console.error('Ağ Hatası:', error.message);
@@ -80,24 +89,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const signUpButton = document.getElementById('sign-up');
     const signInButton = document.getElementById('sign-in');
     const authForms = document.getElementById('auth-forms');
+    const signupFormContainer = document.getElementById('signup-form');
+    const signinFormContainer = document.getElementById('signin-form');
     const signupForm = document.getElementById('signupForm');
     const signinForm = document.getElementById('signinForm');
 
     if (signUpButton) {
         signUpButton.addEventListener('click', () => {
             console.log('Kayıt Ol Butonuna Tıklandı.');
-            authForms.style.display = 'block';
-            signupForm.style.display = 'block';
-            signinForm.style.display = 'none';
+            authForms.style.display = 'flex'; // Flex for centering
+            signupFormContainer.style.display = 'block';
+            signinFormContainer.style.display = 'none';
         });
     }
 
     if (signInButton) {
         signInButton.addEventListener('click', () => {
             console.log('Giriş Yap Butonuna Tıklandı.');
-            authForms.style.display = 'block';
-            signinForm.style.display = 'block';
-            signupForm.style.display = 'none';
+            authForms.style.display = 'flex'; // Flex for centering
+            signinFormContainer.style.display = 'block';
+            signupFormContainer.style.display = 'none';
         });
     }
 
