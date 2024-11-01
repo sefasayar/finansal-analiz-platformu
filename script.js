@@ -1,16 +1,16 @@
 // script.js
 
 // Supabase bağlantısı
-const supabaseUrl = 'https://neijkzbyyqtwpmsvymip.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laWpremJ5eXF0d3Btc3Z5bWlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA0NjY2NjAsImV4cCI6MjA0NjA0MjY2MH0.JiDT3kT_Ror6-AWFKTo9JJBQUC_ZQTPXOYJNpBlaaxQ';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseUrl = 'https://neijkzbyyqtwpmsvymip.supabase.co'; // Supabase URL'nizi buraya ekleyin
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laWpremJ5eXF0d3Btc3Z5bWlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA0NjY2NjAsImV4cCI6MjA0NjA0MjY2MH0.JiDT3kT_Ror6-AWFKTo9JJBQUC_ZQTPXOYJNpBlaaxQ'; // Supabase Anon Key'inizi buraya ekleyin
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-console.log('Supabase Client Oluşturuldu:', supabase);
+console.log('Supabase Client Oluşturuldu:', supabaseClient);
 
 // Kullanıcı Kayıt Olma Fonksiyonu
 async function signUp(email, password) {
     console.log('Kayıt Fonksiyonu Çalıştırılıyor...');
-    const { user, error } = await supabase.auth.signUp({
+    const { user, error } = await supabaseClient.auth.signUp({
         email: email,
         password: password,
     });
@@ -26,7 +26,7 @@ async function signUp(email, password) {
 // Kullanıcı Giriş Yapma Fonksiyonu
 async function signIn(email, password) {
     console.log('Giriş Fonksiyonu Çalıştırılıyor...');
-    const { user, error } = await supabase.auth.signInWithPassword({
+    const { user, error } = await supabaseClient.auth.signInWithPassword({
         email: email,
         password: password,
     });
@@ -41,7 +41,7 @@ async function signIn(email, password) {
 
 // Abonelik Satın Alma Fonksiyonu
 async function subscribeUser(planId) {
-    const user = supabase.auth.user();
+    const user = supabaseClient.auth.user();
 
     if (!user) {
         console.error('Kullanıcı giriş yapmamış.');
