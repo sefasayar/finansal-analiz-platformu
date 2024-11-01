@@ -50,7 +50,6 @@ async function subscribeUser(planId) {
     }
 
     try {
-        console.log('Abonelik Satın Alma Başlıyor...');
         const response = await fetch('/api/subscribe', {
             method: 'POST',
             headers: {
@@ -107,12 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
-            console.log('Kayıt Formu Gönderildi:', email, password);
-            if (email && password) {
-                signUp(email, password);
-            } else {
-                alert('Lütfen geçerli bir e-posta ve şifre girin.');
-            }
+            signUp(email, password);
         });
     }
 
@@ -121,12 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const email = document.getElementById('signin-email').value;
             const password = document.getElementById('signin-password').value;
-            console.log('Giriş Formu Gönderildi:', email, password);
-            if (email && password) {
-                signIn(email, password);
-            } else {
-                alert('Lütfen geçerli bir e-posta ve şifre girin.');
-            }
+            signIn(email, password);
         });
     }
 
@@ -150,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error('Bilinmeyen Abonelik Paketi');
             }
 
-            console.log('Abonelik Planı Seçildi:', planName, planId);
             subscribeUser(planId);
         });
     });
