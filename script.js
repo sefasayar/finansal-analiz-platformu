@@ -1,8 +1,10 @@
 // script.js
 
+// script.js
+
 // Supabase bağlantısı
-const supabaseUrl = 'https://YOUR_SUPABASE_URL.supabase.co';
-const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_ANON_KEY;
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 // Kullanıcı Kayıt Olma Fonksiyonu
@@ -67,29 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('Finansal Analiz Platformu yüklendi.');
-
-    // Örnek: Kayıt ve Giriş Butonlarına Event Listener Ekleme
-    const signUpButton = document.getElementById('sign-up');
-    const signInButton = document.getElementById('sign-in');
-
-    if (signUpButton) {
-        signUpButton.addEventListener('click', () => {
-            const email = prompt('E-posta adresinizi girin:');
-            const password = prompt('Şifrenizi girin:');
-            signUp(email, password);
-        });
-    }
-
-    if (signInButton) {
-        signInButton.addEventListener('click', () => {
-            const email = prompt('E-posta adresinizi girin:');
-            const password = prompt('Şifrenizi girin:');
-            signIn(email, password);
-        });
-    }
-});
 // script.js
 
 // Abonelik Satın Alma Fonksiyonu
