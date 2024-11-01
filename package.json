@@ -12,6 +12,5 @@
     "technicalindicators": "^3.0.0"
   },
   "devDependencies": {
-    "vercel": "^28.0.0" // "Eğer build ve start script'lerinde vercel komutunu kullanıyorsanız"
-  }
+    "vercel": "^28.0.0" // 
 }
