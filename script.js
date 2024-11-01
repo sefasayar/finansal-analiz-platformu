@@ -38,7 +38,14 @@ async function signIn(email, password) {
         alert('Giriş Başarılı!');
     }
 }
-
+async function updateStockChart(symbol) {
+    try {
+        // Verileri çekme ve saklama
+        await createStockChart(symbol);
+    } catch (error) {
+        console.error('Grafik güncelleme hatası:', error);
+    }
+}
 // Abonelik Satın Alma Fonksiyonu
 async function subscribeUser(planId) {
     console.log('Abonelik Satın Alma Fonksiyonu Çalıştırılıyor...');
@@ -97,6 +104,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeSignupButton = document.getElementById('close-signup');
     const closeSigninButton = document.getElementById('close-signin');
     createStockChart('AAPL');
+        // Fetch Data Butonuna Event Listener Ekleme
+    const fetchDataButton = document.getElementById('fetch-data');
+    const stockSymbolInput = document.getElementById('stock-symbol');
+        fetchDataButton.addEventListener('click', () => {
+        const symbol = stockSymbolInput.value.trim().toUpperCase();
+        if (symbol) {
+            createStockChart(symbol);
+        } else {
+            alert('Lütfen geçerli bir hisse senedi sembolü girin.');
+        }
+    });
+});
 
     if (closeSignupButton) {
         closeSignupButton.addEventListener('click', () => {
