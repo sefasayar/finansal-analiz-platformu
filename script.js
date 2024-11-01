@@ -154,3 +154,101 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+// script.js
+
+// ... mevcut Supabase bağlantısı ve fonksiyonlar ...
+
+// Grafik Oluşturma Fonksiyonu
+async function createStockChart(symbol) {
+    try {
+        const response = await fetch(`/api/fetchStockData`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ symbol: symbol }),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            console.log(result.message);
+        } else {
+            alert('Veri çekme hatası: ' + result.message);
+            return;
+        }
+
+        // Supabase'ten veri çekme
+        const { data: stockData, error } = await supabaseClient
+            .from('stocks')
+            .select('id, symbol')
+            .eq('symbol', symbol)
+            .single();
+
+        if (error) {
+            throw error;
+        }
+
+        const { data: prices, error: pricesError } = await supabaseClient
+            .from('stock_prices')
+            .select('*')
+            .eq('stock_id', stockData.id)
+            .order('date', { ascending: true });
+
+        if (pricesError) {
+            throw pricesError;
+        }
+
+        // Tarihleri ve kapanış fiyatlarını ayırma
+        const dates = prices.map(price => price.date);
+        const closes = prices.map(price => price.close);
+
+        // Chart.js ile grafik oluşturma
+        const ctx = document.getElementById('stockChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: `${symbol} Kapanış Fiyatları`,
+                    data: closes,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    fill: true,
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Tarih'
+                        }
+                    },
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Kapanış Fiyatı ($)'
+                        }
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Grafik oluşturma hatası:', error);
+        alert('Grafik oluşturma hatası: ' + error.message);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // ... mevcut event listener'lar ...
+
+    // Örnek olarak, "AAPL" sembolü ile grafik oluşturma
+    createStockChart('AAPL');
+});
+
