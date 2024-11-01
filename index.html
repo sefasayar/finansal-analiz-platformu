@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="style.css">
     <!-- Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
@@ -47,6 +48,11 @@
         </section>
 
         <section id="packages">
+        <section id="analysis">
+        <h2>Hisse Senedi Analizi</h2>
+        <canvas id="stockChart" width="400" height="200"></canvas>
+        </section>
+
             <h2>Abonelik Paketleri</h2>
             <div class="package">
                 <h3>Basic</h3>
