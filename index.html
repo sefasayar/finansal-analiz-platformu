@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="style.css">
     <!-- Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -32,12 +33,6 @@
             <p>Abonelik modellerimizle piyasa trendlerini yakından takip edin, doğru yatırım kararları alın ve finansal özgürlüğünüzü kazanın.</p>
             <a href="#packages" class="btn">Abonelik Paketlerini Görüntüle</a>
         </section>
-<section id="analysis">
-    <h2>Hisse Senedi Analizi</h2>
-    <input type="text" id="stock-symbol" placeholder="Hisse Senedi Sembolü (örn. AAPL)" />
-    <button id="fetch-data" class="btn">Verileri Çek</button>
-    <canvas id="stockChart" width="400" height="200"></canvas>
-</section>
 
         <section id="about">
             <h2>Platform Hakkında</h2>
@@ -54,11 +49,6 @@
         </section>
 
         <section id="packages">
-        <section id="analysis">
-        <h2>Hisse Senedi Analizi</h2>
-        <canvas id="stockChart" width="400" height="200"></canvas>
-        </section>
-
             <h2>Abonelik Paketleri</h2>
             <div class="package">
                 <h3>Basic</h3>
@@ -80,9 +70,19 @@
             </div>
         </section>
 
+        <!-- Hisse Senedi Analizi Bölümü -->
+        <section id="analysis">
+            <h2>Hisse Senedi ve Piyasa Analizi</h2>
+            <div id="market-data">
+                <!-- Dinamik olarak eklenen piyasa verileri burada görüntülenecek -->
+            </div>
+            <canvas id="stockChart" width="400" height="200"></canvas>
+        </section>
+
         <!-- Kayıt ve Giriş Formları -->
         <section id="auth-forms" style="display: none;">
-            <div class="form-container" id="signup-form" style="display: none;">
+            <div class="form-container" id="signup-form" style="display: none; position: relative;">
+                <button class="close-btn" id="close-signup">&times;</button>
                 <h2>Kayıt Ol</h2>
                 <form id="signupForm">
                     <label for="signup-email">E-posta:</label>
@@ -92,7 +92,8 @@
                     <button type="submit">Kayıt Ol</button>
                 </form>
             </div>
-            <div class="form-container" id="signin-form" style="display: none;">
+            <div class="form-container" id="signin-form" style="display: none; position: relative;">
+                <button class="close-btn" id="close-signin">&times;</button>
                 <h2>Giriş Yap</h2>
                 <form id="signinForm">
                     <label for="signin-email">E-posta:</label>
