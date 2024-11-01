@@ -83,10 +83,10 @@ async function subscribeUser(planId) {
 }
 
 // Güçlü Al ve Güçlü Sat Önerilerini Görselleştirme Fonksiyonu
-async function displayRecommendations() {
+async function displayRecommendations(symbol) {
     try {
         // Serverless fonksiyonunu çağırarak analiz verilerini çekme
-        const response = await fetch('/api/fetchData', {
+        const response = await fetch(`/api/analyzeMarket?symbol=${symbol}`, {
             method: 'GET',
         });
 
@@ -95,55 +95,119 @@ async function displayRecommendations() {
             alert('Veri çekme hatası: ' + result.message);
             return;
         }
-       // Supabase'ten "Strong Buy" ve "Strong Sell" önerilerini çekme
-        const { data: analysisData, error } = await supabaseClient
-            .from('stock_analysis')
-            .select('stock_id, recommendation, stocks(symbol)')
-            .eq('recommendation', 'Strong Buy')
-            .or('recommendation.eq.Strong Sell')
-            .is('stock_id', 'not.null'); // Ensure stock_id is not null
 
-        if (error) {
-            throw error;
+        console.log('API Yanıtı:', result);
+
+        // Recommendations Container'ını temizle
+        const recommendationsDiv = document.getElementById('recommendations');
+        recommendationsDiv.innerHTML = '';
+
+        // Eğer "Strong Buy" veya "Strong Sell" önerisi varsa göster
+        if (result.recommendation === 'Strong Buy' || result.recommendation === 'Strong Sell') {
+            const recommendationCard = document.createElement('div');
+            recommendationCard.classList.add('recommendation-card');
+
+            if (result.recommendation === 'Strong Buy') {
+                recommendationCard.classList.add('strong-buy');
+            } else if (result.recommendation === 'Strong Sell') {
+                recommendationCard.classList.add('strong-sell');
+            }
+
+            recommendationCard.innerHTML = `
+                <h3>${result.recommendation} Önerisi</h3>
+                <p>Hisse Senedi: ${result.symbol}</p>
+                <p>RSI: ${result.rsi.toFixed(2)}</p>
+                <p>Duygu Skoru: ${result.sentiment_score.toFixed(2)}</p>
+            `;
+
+            recommendationsDiv.appendChild(recommendationCard);
+        } else {
+            recommendationsDiv.innerHTML = '<p>Şu anda güçlü al veya güçlü sat önerisi yok.</p>';
         }
 
-        if (analysisData.length === 0) {
-            document.getElementById('recommendations').innerHTML = '<p>Şu anda güçlü al veya güçlü sat önerisi yok.</p>';
+        // Supabase'ten teknik analiz verilerini çekme
+        const { data: stockData, error: stockError } = await supabaseClient
+            .from('stocks')
+            .select('*')
+            .eq('symbol', symbol)
+            .single();
+
+        if (stockError) {
+            throw stockError;
+        }
+
+        const { data: analysisList, error: analysisError } = await supabaseClient
+            .from('stock_analysis')
+            .select('*')
+            .eq('stock_id', stockData.id)
+            .order('date', { ascending: true });
+
+        if (analysisError) {
+            throw analysisError;
+        }
+
+        if (analysisList.length === 0) {
+            alert('Analiz verisi bulunamadı.');
             return;
         }
 
+        // RSI ve diğer verileri grafiğe hazırlama
+        const dates = analysisList.map(item => item.date);
+        const rsiValues = analysisList.map(item => item.rsi);
+        const sentimentScores = analysisList.map(item => item.sentiment_score);
 
- // Güçlü Al ve Güçlü Sat önerilerini gruplandırma
-        const strongBuy = analysisData.filter(item => item.recommendation === 'Strong Buy');
-        const strongSell = analysisData.filter(item => item.recommendation === 'Strong Sell');
-
-
-  // HTML içeriğini oluşturma
-        let recommendationsHTML = '';
-
-        if (strongBuy.length > 0) {
-            recommendationsHTML += `
-                <div class="recommendation-card strong-buy">
-                    <h3>Güçlü Al Önerileri</h3>
-                    <ul>
-                        ${strongBuy.map(item => `<li>${item.stocks.symbol}</li>`).join('')}
-                    </ul>
-                </div>
-            `;
+        // Chart.js ile grafik oluşturma
+        const ctx = document.getElementById('stockChart').getContext('2d');
+        // Eğer önceki grafik varsa sil
+        if (window.stockChartInstance) {
+            window.stockChartInstance.destroy();
         }
-
-        if (strongSell.length > 0) {
-            recommendationsHTML += `
-                <div class="recommendation-card strong-sell">
-                    <h3>Güçlü Sat Önerileri</h3>
-                    <ul>
-                        ${strongSell.map(item => `<li>${item.stocks.symbol}</li>`).join('')}
-                    </ul>
-                </div>
-            `;
-        }
-
-        document.getElementById('recommendations').innerHTML = recommendationsHTML;
+        window.stockChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [
+                    {
+                        label: 'RSI Değerleri',
+                        data: rsiValues,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        fill: true,
+                    },
+                    {
+                        label: 'Duygu Skoru',
+                        data: sentimentScores,
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1,
+                        fill: true,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Tarih'
+                        }
+                    },
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Değerler'
+                        }
+                    }
+                }
+            }
+        });
 
     } catch (error) {
         console.error('Önerileri görüntüleme hatası:', error);
@@ -241,6 +305,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Güçlü Al ve Güçlü Sat Önerilerini Görselleştirme
-    displayRecommendations();
+    // Market Dropdown Event Listener
+    const marketDropdown = document.getElementById('market-dropdown');
+    marketDropdown.addEventListener('change', () => {
+        const selectedSymbol = marketDropdown.value;
+        if (selectedSymbol) {
+            displayRecommendations(selectedSymbol);
+        } else {
+            // Clear recommendations and chart
+            const recommendationsDiv = document.getElementById('recommendations');
+            recommendationsDiv.innerHTML = '';
+            if (window.stockChartInstance) {
+                window.stockChartInstance.destroy();
+            }
+        }
+    });
 });
