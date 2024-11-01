@@ -1,7 +1,7 @@
 // script.js
 
 // Supabase bağlantısı
-const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseUrl = finansal-analiz-platformu.vercel.app;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
