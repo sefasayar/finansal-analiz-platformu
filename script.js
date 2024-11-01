@@ -95,8 +95,7 @@ async function displayRecommendations() {
             alert('Veri çekme hatası: ' + result.message);
             return;
         }
-
-        // Supabase'ten "Strong Buy" ve "Strong Sell" önerilerini çekme
+       // Supabase'ten "Strong Buy" ve "Strong Sell" önerilerini çekme
         const { data: analysisData, error } = await supabaseClient
             .from('stock_analysis')
             .select('stock_id, recommendation, stocks(symbol)')
@@ -113,11 +112,13 @@ async function displayRecommendations() {
             return;
         }
 
-        // Güçlü Al ve Güçlü Sat önerilerini gruplandırma
+
+ // Güçlü Al ve Güçlü Sat önerilerini gruplandırma
         const strongBuy = analysisData.filter(item => item.recommendation === 'Strong Buy');
         const strongSell = analysisData.filter(item => item.recommendation === 'Strong Sell');
 
-        // HTML içeriğini oluşturma
+
+  // HTML içeriğini oluşturma
         let recommendationsHTML = '';
 
         if (strongBuy.length > 0) {
