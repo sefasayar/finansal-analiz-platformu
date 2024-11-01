@@ -1,3 +1,14 @@
 {
-  "type": "module"
+  "name": "finansal-analiz-platformu",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "vercel build",
+    "start": "vercel start"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.0.0",
+    "node-fetch": "^2.6.1",
+    "technicalindicators": "^3.0.0"
+  }
 }
