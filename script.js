@@ -1,7 +1,5 @@
 // script.js
 
-// script.js
-
 // Supabase bağlantısı
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
