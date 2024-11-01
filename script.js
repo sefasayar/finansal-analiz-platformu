@@ -93,6 +93,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const signinFormContainer = document.getElementById('signin-form');
     const signupForm = document.getElementById('signupForm');
     const signinForm = document.getElementById('signinForm');
+    // Çarpı Butonlarına Event Listener Ekleme
+    const closeSignupButton = document.getElementById('close-signup');
+    const closeSigninButton = document.getElementById('close-signin');
+    createStockChart('AAPL');
+
+    if (closeSignupButton) {
+        closeSignupButton.addEventListener('click', () => {
+            authForms.style.display = 'none';
+            signupFormContainer.style.display = 'none';
+        });
+    }
+
+    if (closeSigninButton) {
+        closeSigninButton.addEventListener('click', () => {
+            authForms.style.display = 'none';
+            signinFormContainer.style.display = 'none';
+        });
+    }
+});
 
     if (signUpButton) {
         signUpButton.addEventListener('click', () => {
@@ -244,11 +263,4 @@ async function createStockChart(symbol) {
         alert('Grafik oluşturma hatası: ' + error.message);
     }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    // ... mevcut event listener'lar ...
-
-    // Örnek olarak, "AAPL" sembolü ile grafik oluşturma
-    createStockChart('AAPL');
-});
 
