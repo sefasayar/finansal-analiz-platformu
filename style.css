@@ -85,6 +85,20 @@ nav ul li button:hover, nav ul li a:hover {
     text-align: center;
 }
 
+#market-selector {
+    margin-bottom: 20px;
+}
+
+#market-selector label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+#market-dropdown {
+    padding: 5px 10px;
+    font-size: 16px;
+}
+
 #recommendations {
     display: flex;
     justify-content: center;
@@ -107,13 +121,7 @@ nav ul li button:hover, nav ul li a:hover {
     text-align: center;
 }
 
-.recommendation-card ul {
-    list-style: none;
-    padding: 0;
-}
-
-.recommendation-card li {
-    padding: 5px 0;
+.recommendation-card p {
     font-size: 18px;
 }
 
@@ -203,11 +211,8 @@ footer {
     cursor: pointer;
 }
 
-/* Güçlü Al ve Güçlü Sat Kartları için Renkler */
-.strong-buy {
-    border-left: 5px solid green;
-}
-
-.strong-sell {
-    border-left: 5px solid red;
+/* Chart Canvas Stil */
+#stockChart {
+    max-width: 800px;
+    margin: 0 auto;
 }
