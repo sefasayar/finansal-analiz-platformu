@@ -85,27 +85,44 @@ nav ul li button:hover, nav ul li a:hover {
     text-align: center;
 }
 
-#market-data {
+#recommendations {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
     margin-bottom: 30px;
 }
 
-.market-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 10px 0;
+.recommendation-card {
+    border: 1px solid #bdc3c7;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.market-item span {
-    margin-left: 10px;
+.recommendation-card h3 {
+    margin-top: 0;
+    text-align: center;
 }
 
-.up-arrow {
-    color: green;
+.recommendation-card ul {
+    list-style: none;
+    padding: 0;
 }
 
-.down-arrow {
-    color: red;
+.recommendation-card li {
+    padding: 5px 0;
+    font-size: 18px;
+}
+
+.strong-buy {
+    border-left: 5px solid green;
+}
+
+.strong-sell {
+    border-left: 5px solid red;
 }
 
 footer {
@@ -113,7 +130,7 @@ footer {
     color: white;
     text-align: center;
     padding: 10px 0;
-    position: fixed;
+    position: relative;
     width: 100%;
     bottom: 0;
 }
@@ -184,4 +201,13 @@ footer {
     border: none;
     font-size: 20px;
     cursor: pointer;
+}
+
+/* Güçlü Al ve Güçlü Sat Kartları için Renkler */
+.strong-buy {
+    border-left: 5px solid green;
+}
+
+.strong-sell {
+    border-left: 5px solid red;
 }
