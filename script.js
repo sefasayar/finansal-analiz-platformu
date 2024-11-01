@@ -1,12 +1,15 @@
 // script.js
 
 // Supabase bağlantısı
-const supabaseUrl = finansal-analiz-platformu.vercel.app;
-const supabaseKey = process.env.SUPABASE_ANON_KEY;
+const supabaseUrl = 'https://neijkzbyyqtwpmsvymip.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laWpremJ5eXF0d3Btc3Z5bWlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA0NjY2NjAsImV4cCI6MjA0NjA0MjY2MH0.JiDT3kT_Ror6-AWFKTo9JJBQUC_ZQTPXOYJNpBlaaxQ';
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+console.log('Supabase Client Oluşturuldu:', supabase);
 
 // Kullanıcı Kayıt Olma Fonksiyonu
 async function signUp(email, password) {
+    console.log('Kayıt Fonksiyonu Çalıştırılıyor...');
     const { user, error } = await supabase.auth.signUp({
         email: email,
         password: password,
@@ -22,6 +25,7 @@ async function signUp(email, password) {
 
 // Kullanıcı Giriş Yapma Fonksiyonu
 async function signIn(email, password) {
+    console.log('Giriş Fonksiyonu Çalıştırılıyor...');
     const { user, error } = await supabase.auth.signInWithPassword({
         email: email,
         password: password,
@@ -35,50 +39,18 @@ async function signIn(email, password) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('Finansal Analiz Platformu yüklendi.');
-
-    // Kayıt ve Giriş Butonlarına Event Listener Ekleme
-    const signUpButton = document.getElementById('sign-up');
-    const signInButton = document.getElementById('sign-in');
-
-    if (signUpButton) {
-        signUpButton.addEventListener('click', () => {
-            const email = prompt('E-posta adresinizi girin:');
-            const password = prompt('Şifrenizi girin:');
-            if (email && password) {
-                signUp(email, password);
-            } else {
-                alert('Lütfen geçerli bir e-posta ve şifre girin.');
-            }
-        });
-    }
-
-    if (signInButton) {
-        signInButton.addEventListener('click', () => {
-            const email = prompt('E-posta adresinizi girin:');
-            const password = prompt('Şifrenizi girin:');
-            if (email && password) {
-                signIn(email, password);
-            } else {
-                alert('Lütfen geçerli bir e-posta ve şifre girin.');
-            }
-        });
-    }
-});
-
-// script.js
-
 // Abonelik Satın Alma Fonksiyonu
 async function subscribeUser(planId) {
     const user = supabase.auth.user();
 
     if (!user) {
         console.error('Kullanıcı giriş yapmamış.');
+        alert('Lütfen önce giriş yapın.');
         return;
     }
 
     try {
+        console.log('Abonelik Satın Alma Başlıyor...');
         const response = await fetch('/api/subscribe', {
             method: 'POST',
             headers: {
@@ -91,34 +63,95 @@ async function subscribeUser(planId) {
 
         if (response.ok) {
             console.log('Abonelik Başarıyla Alındı:', data);
+            alert('Abonelik Başarıyla Alındı!');
         } else {
             console.error('Abonelik Satın Alma Hatası:', data.message);
+            alert('Abonelik Satın Alma Hatası: ' + data.message);
         }
     } catch (error) {
         console.error('Ağ Hatası:', error.message);
+        alert('Ağ Hatası: ' + error.message);
     }
 }
 
-// Örnek: Abonelik butonlarına event listener ekleme
-document.querySelectorAll('.package .btn').forEach(button => {
-    button.addEventListener('click', () => {
-        const planName = button.parentElement.querySelector('h3').innerText;
-        let planId;
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Finansal Analiz Platformu yüklendi.');
 
-        switch (planName) {
-            case 'Basic':
-                planId = 1;
-                break;
-            case 'Silver':
-                planId = 2;
-                break;
-            case 'Platinum':
-                planId = 3;
-                break;
-            default:
-                console.error('Bilinmeyen Abonelik Paketi');
-        }
+    // Kayıt ve Giriş Butonlarına Event Listener Ekleme
+    const signUpButton = document.getElementById('sign-up');
+    const signInButton = document.getElementById('sign-in');
+    const authForms = document.getElementById('auth-forms');
+    const signupForm = document.getElementById('signupForm');
+    const signinForm = document.getElementById('signinForm');
 
-        subscribeUser(planId);
+    if (signUpButton) {
+        signUpButton.addEventListener('click', () => {
+            console.log('Kayıt Ol Butonuna Tıklandı.');
+            authForms.style.display = 'block';
+            signupForm.style.display = 'block';
+            signinForm.style.display = 'none';
+        });
+    }
+
+    if (signInButton) {
+        signInButton.addEventListener('click', () => {
+            console.log('Giriş Yap Butonuna Tıklandı.');
+            authForms.style.display = 'block';
+            signinForm.style.display = 'block';
+            signupForm.style.display = 'none';
+        });
+    }
+
+    if (signupForm) {
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            console.log('Kayıt Formu Gönderildi:', email, password);
+            if (email && password) {
+                signUp(email, password);
+            } else {
+                alert('Lütfen geçerli bir e-posta ve şifre girin.');
+            }
+        });
+    }
+
+    if (signinForm) {
+        signinForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
+            console.log('Giriş Formu Gönderildi:', email, password);
+            if (email && password) {
+                signIn(email, password);
+            } else {
+                alert('Lütfen geçerli bir e-posta ve şifre girin.');
+            }
+        });
+    }
+
+    // Abonelik butonlarına event listener ekleme
+    document.querySelectorAll('.package .btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const planName = button.parentElement.querySelector('h3').innerText;
+            let planId;
+
+            switch (planName) {
+                case 'Basic':
+                    planId = 1;
+                    break;
+                case 'Silver':
+                    planId = 2;
+                    break;
+                case 'Platinum':
+                    planId = 3;
+                    break;
+                default:
+                    console.error('Bilinmeyen Abonelik Paketi');
+            }
+
+            console.log('Abonelik Planı Seçildi:', planName, planId);
+            subscribeUser(planId);
+        });
     });
 });
