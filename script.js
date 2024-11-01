@@ -1,8 +1,8 @@
 // script.js
 
 // Supabase bağlantısı
-const supabaseUrl = 'https://neijkzbyyqtwpmsvymip.supabase.co'; // Supabase URL'nizi buraya ekleyin
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laWpremJ5eXF0d3Btc3Z5bWlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA0NjY2NjAsImV4cCI6MjA0NjA0MjY2MH0.JiDT3kT_Ror6-AWFKTo9JJBQUC_ZQTPXOYJNpBlaaxQ'; // Supabase Anon Key'inizi buraya ekleyin
+const supabaseUrl = 'https://YOUR_SUPABASE_URL.supabase.co'; // Supabase URL'nizi buraya ekleyin
+const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Supabase Anon Key'inizi buraya ekleyin
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 console.log('Supabase Client Oluşturuldu:', supabaseClient);
@@ -38,14 +38,7 @@ async function signIn(email, password) {
         alert('Giriş Başarılı!');
     }
 }
-async function updateStockChart(symbol) {
-    try {
-        // Verileri çekme ve saklama
-        await createStockChart(symbol);
-    } catch (error) {
-        console.error('Grafik güncelleme hatası:', error);
-    }
-}
+
 // Abonelik Satın Alma Fonksiyonu
 async function subscribeUser(planId) {
     console.log('Abonelik Satın Alma Fonksiyonu Çalıştırılıyor...');
@@ -100,37 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const signinFormContainer = document.getElementById('signin-form');
     const signupForm = document.getElementById('signupForm');
     const signinForm = document.getElementById('signinForm');
-    // Çarpı Butonlarına Event Listener Ekleme
-    const closeSignupButton = document.getElementById('close-signup');
-    const closeSigninButton = document.getElementById('close-signin');
-    createStockChart('AAPL');
-        // Fetch Data Butonuna Event Listener Ekleme
-    const fetchDataButton = document.getElementById('fetch-data');
-    const stockSymbolInput = document.getElementById('stock-symbol');
-        fetchDataButton.addEventListener('click', () => {
-        const symbol = stockSymbolInput.value.trim().toUpperCase();
-        if (symbol) {
-            createStockChart(symbol);
-        } else {
-            alert('Lütfen geçerli bir hisse senedi sembolü girin.');
-        }
-    });
-});
-
-    if (closeSignupButton) {
-        closeSignupButton.addEventListener('click', () => {
-            authForms.style.display = 'none';
-            signupFormContainer.style.display = 'none';
-        });
-    }
-
-    if (closeSigninButton) {
-        closeSigninButton.addEventListener('click', () => {
-            authForms.style.display = 'none';
-            signinFormContainer.style.display = 'none';
-        });
-    }
-});
 
     if (signUpButton) {
         signUpButton.addEventListener('click', () => {
@@ -152,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (signupForm) {
         signupForm.addEventListener('submit', (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Sayfa yenilenmesini engelle
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
             signUp(email, password);
@@ -161,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (signinForm) {
         signinForm.addEventListener('submit', (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Sayfa yenilenmesini engelle
             const email = document.getElementById('signin-email').value;
             const password = document.getElementById('signin-password').value;
             signIn(email, password);
@@ -191,95 +153,22 @@ document.addEventListener('DOMContentLoaded', () => {
             subscribeUser(planId);
         });
     });
-});
-// script.js
 
-// ... mevcut Supabase bağlantısı ve fonksiyonlar ...
+    // Çarpı (Close) Butonlarına Event Listener Ekleme
+    const closeSignupButton = document.getElementById('close-signup');
+    const closeSigninButton = document.getElementById('close-signin');
 
-// Grafik Oluşturma Fonksiyonu
-async function createStockChart(symbol) {
-    try {
-        const response = await fetch(`/api/fetchStockData`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ symbol: symbol }),
+    if (closeSignupButton) {
+        closeSignupButton.addEventListener('click', () => {
+            authForms.style.display = 'none';
+            signupFormContainer.style.display = 'none';
         });
-
-        const result = await response.json();
-        if (response.ok) {
-            console.log(result.message);
-        } else {
-            alert('Veri çekme hatası: ' + result.message);
-            return;
-        }
-
-        // Supabase'ten veri çekme
-        const { data: stockData, error } = await supabaseClient
-            .from('stocks')
-            .select('id, symbol')
-            .eq('symbol', symbol)
-            .single();
-
-        if (error) {
-            throw error;
-        }
-
-        const { data: prices, error: pricesError } = await supabaseClient
-            .from('stock_prices')
-            .select('*')
-            .eq('stock_id', stockData.id)
-            .order('date', { ascending: true });
-
-        if (pricesError) {
-            throw pricesError;
-        }
-
-        // Tarihleri ve kapanış fiyatlarını ayırma
-        const dates = prices.map(price => price.date);
-        const closes = prices.map(price => price.close);
-
-        // Chart.js ile grafik oluşturma
-        const ctx = document.getElementById('stockChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: dates,
-                datasets: [{
-                    label: `${symbol} Kapanış Fiyatları`,
-                    data: closes,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1,
-                    fill: true,
-                }]
-            },
-            options: {
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'day'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Tarih'
-                        }
-                    },
-                    y: {
-                        beginAtZero: false,
-                        title: {
-                            display: true,
-                            text: 'Kapanış Fiyatı ($)'
-                        }
-                    }
-                }
-            }
-        });
-    } catch (error) {
-        console.error('Grafik oluşturma hatası:', error);
-        alert('Grafik oluşturma hatası: ' + error.message);
     }
-}
 
+    if (closeSigninButton) {
+        closeSigninButton.addEventListener('click', () => {
+            authForms.style.display = 'none';
+            signinFormContainer.style.display = 'none';
+        });
+    }
+});
