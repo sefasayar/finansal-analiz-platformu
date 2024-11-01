@@ -1,7 +1,3 @@
-<!-- Supabase JS SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
-
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -11,7 +7,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- index.html içinde <header> bölümüne ekleyin -->
     <header>
         <h1>Finansal Analiz Platformu</h1>
         <nav>
@@ -25,7 +20,6 @@
             </ul>
         </nav>
     </header>
-    
 
     <main>
         <section id="hero">
@@ -55,12 +49,38 @@
                 <a href="#" class="btn">Satın Al</a>
             </div>
         </section>
+
+        <!-- Kayıt ve Giriş Formları -->
+        <section id="auth-forms" style="display: none;">
+            <div id="signup-form" style="display: none;">
+                <h2>Kayıt Ol</h2>
+                <form id="signupForm">
+                    <label for="signup-email">E-posta:</label>
+                    <input type="email" id="signup-email" required>
+                    <label for="signup-password">Şifre:</label>
+                    <input type="password" id="signup-password" required>
+                    <button type="submit">Kayıt Ol</button>
+                </form>
+            </div>
+            <div id="signin-form" style="display: none;">
+                <h2>Giriş Yap</h2>
+                <form id="signinForm">
+                    <label for="signin-email">E-posta:</label>
+                    <input type="email" id="signin-email" required>
+                    <label for="signin-password">Şifre:</label>
+                    <input type="password" id="signin-password" required>
+                    <button type="submit">Giriş Yap</button>
+                </form>
+            </div>
+        </section>
     </main>
 
     <footer>
         <p>&copy; 2024 Finansal Analiz Platformu. Tüm hakları saklıdır.</p>
     </footer>
 
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
