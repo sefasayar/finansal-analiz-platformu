@@ -10,7 +10,7 @@ console.log('Supabase Client Oluşturuldu:', supabaseClient);
 // Kullanıcı Kayıt Olma Fonksiyonu
 async function signUp(email, password) {
     console.log('Kayıt Fonksiyonu Çalıştırılıyor...');
-    const { user, error } = await supabaseClient.auth.signUp({
+    const { data, error } = await supabaseClient.auth.signUp({
         email: email,
         password: password,
     });
@@ -18,7 +18,7 @@ async function signUp(email, password) {
         console.error('Kayıt Hatası:', error.message);
         alert('Kayıt Hatası: ' + error.message);
     } else {
-        console.log('Kullanıcı Kaydedildi:', user);
+        console.log('Kullanıcı Kaydedildi:', data.user);
         alert('Kayıt Başarılı! Lütfen e-posta adresinizi doğrulayın.');
     }
 }
@@ -26,7 +26,7 @@ async function signUp(email, password) {
 // Kullanıcı Giriş Yapma Fonksiyonu
 async function signIn(email, password) {
     console.log('Giriş Fonksiyonu Çalıştırılıyor...');
-    const { user, error } = await supabaseClient.auth.signInWithPassword({
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
         email: email,
         password: password,
     });
@@ -34,7 +34,7 @@ async function signIn(email, password) {
         console.error('Giriş Hatası:', error.message);
         alert('Giriş Hatası: ' + error.message);
     } else {
-        console.log('Kullanıcı Giriş Yaptı:', user);
+        console.log('Kullanıcı Giriş Yaptı:', data.user);
         alert('Giriş Başarılı!');
     }
 }
