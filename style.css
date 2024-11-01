@@ -210,9 +210,3 @@ footer {
     font-size: 20px;
     cursor: pointer;
 }
-
-/* Chart Canvas Stil */
-#stockChart {
-    max-width: 800px;
-    margin: 0 auto;
-}
