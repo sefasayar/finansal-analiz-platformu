@@ -1,8 +1,8 @@
 // script.js
 
 // Supabase bağlantısı
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseUrl = 'https://YOUR_SUPABASE_URL.supabase.co';
+const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 // Kullanıcı Kayıt Olma Fonksiyonu
@@ -11,8 +11,13 @@ async function signUp(email, password) {
         email: email,
         password: password,
     });
-    if (error) console.error('Kayıt Hatası:', error.message);
-    else console.log('Kullanıcı Kaydedildi:', user);
+    if (error) {
+        console.error('Kayıt Hatası:', error.message);
+        alert('Kayıt Hatası: ' + error.message);
+    } else {
+        console.log('Kullanıcı Kaydedildi:', user);
+        alert('Kayıt Başarılı! Lütfen e-posta adresinizi doğrulayın.');
+    }
 }
 
 // Kullanıcı Giriş Yapma Fonksiyonu
@@ -21,9 +26,46 @@ async function signIn(email, password) {
         email: email,
         password: password,
     });
-    if (error) console.error('Giriş Hatası:', error.message);
-    else console.log('Kullanıcı Giriş Yaptı:', user);
+    if (error) {
+        console.error('Giriş Hatası:', error.message);
+        alert('Giriş Hatası: ' + error.message);
+    } else {
+        console.log('Kullanıcı Giriş Yaptı:', user);
+        alert('Giriş Başarılı!');
+    }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Finansal Analiz Platformu yüklendi.');
+
+    // Kayıt ve Giriş Butonlarına Event Listener Ekleme
+    const signUpButton = document.getElementById('sign-up');
+    const signInButton = document.getElementById('sign-in');
+
+    if (signUpButton) {
+        signUpButton.addEventListener('click', () => {
+            const email = prompt('E-posta adresinizi girin:');
+            const password = prompt('Şifrenizi girin:');
+            if (email && password) {
+                signUp(email, password);
+            } else {
+                alert('Lütfen geçerli bir e-posta ve şifre girin.');
+            }
+        });
+    }
+
+    if (signInButton) {
+        signInButton.addEventListener('click', () => {
+            const email = prompt('E-posta adresinizi girin:');
+            const password = prompt('Şifrenizi girin:');
+            if (email && password) {
+                signIn(email, password);
+            } else {
+                alert('Lütfen geçerli bir e-posta ve şifre girin.');
+            }
+        });
+    }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Finansal Analiz Platformu yüklendi.');
