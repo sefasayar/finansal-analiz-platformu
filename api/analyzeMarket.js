@@ -9,9 +9,6 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-// Finnhub API anahtarı
-const finnhubApiKey = process.env.FINNHUB_API_KEY;
-
 // Alpha Vantage API anahtarı
 const alphaVantageApiKey = process.env.ALPHA_VANTAGE_API_KEY;
 
