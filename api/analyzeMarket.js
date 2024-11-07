@@ -1,7 +1,8 @@
 // api/analyzeMarket.js
 
 import { createClient } from '@supabase/supabase-js';
-import fetch from 'node-fetch';
+// 'node-fetch' importunu kaldırdık
+// import fetch from 'node-fetch';
 import { RSI, MACD, SMA } from 'technicalindicators';
 
 // Supabase bağlantısı
@@ -180,8 +181,9 @@ function getMostTradedForexSymbols() {
 }
 
 function getMostTradedStockSymbols() {
+    // Alpha Vantage için 'BRK.B' sembolünü kullanmalısınız
     return ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA',
-            'META', 'NVDA', 'BRK-B', 'JPM', 'JNJ'];
+            'META', 'NVDA', 'BRK.B', 'JPM', 'JNJ'];
 }
 
 function getMostTradedFuturesSymbols() {
