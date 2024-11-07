@@ -2,8 +2,6 @@
 
 import { createClient } from '@supabase/supabase-js';
 // 'node-fetch' importunu kaldırdık
-// import fetch from 'node-fetch';
-import { RSI, MACD, SMA } from 'technicalindicators';
 
 // Supabase bağlantısı
 const supabaseUrl = process.env.SUPABASE_URL;
