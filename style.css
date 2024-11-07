@@ -210,3 +210,33 @@ footer {
     font-size: 20px;
     cursor: pointer;
 }
+/* ... mevcut stiller ... */
+
+#market-selector {
+    margin-bottom: 20px;
+}
+
+#market-selector label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+#market-dropdown {
+    padding: 5px 10px;
+    font-size: 16px;
+}
+
+.recommendation-card {
+    /* Mevcut stiller */
+}
+
+.strong-buy {
+    border-left: 5px solid green;
+}
+
+.strong-sell {
+    border-left: 5px solid red;
+}
+
+/* ... diğer stiller ... */
+
