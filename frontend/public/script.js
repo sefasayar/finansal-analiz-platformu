@@ -1,5 +1,57 @@
 // script.js
+// script.js
 
+// Stripe publishable key
+const stripe = Stripe('pk_live_51NZXjUGxZtShkwxA6MsCRnBECcoRqRuiUunqNtKn6QT34tIWdxxhTSPx2sMJ16ekSXk2nNdSAfSJEgFYWb1QFOCk002C4jr2y7'); // Stripe Publishable Key'inizi buraya ekleyin
+
+// Kullanıcı Kayıt Olma Fonksiyonu
+async function signUp(email, password) {
+    console.log('Kayıt Fonksiyonu Çalıştırılıyor...');
+    // Supabase Auth kullanarak kayıt işlemi
+    // Supabase JavaScript SDK'sını eklemelisiniz
+    // Örnek:
+    // const { data, error } = await supabase.auth.signUp({ email, password });
+    
+<h2>Confirm your signup</h2>
+
+<p>Follow this link to confirm your user:</p>
+<p><a href="{{ .ConfirmationURL }}">Confirm your mail</a></p>
+
+}
+
+// Kullanıcı Giriş Yapma Fonksiyonu
+async function signIn(email, password) {
+    console.log('Giriş Fonksiyonu Çalıştırılıyor...');
+    // Supabase Auth kullanarak giriş işlemi
+    // const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+}
+
+// Abonelik Satın Alma Fonksiyonu
+async function subscribeUser(planId, userId) {
+    console.log('Abonelik Satın Alma Fonksiyonu Çalıştırılıyor...');
+    try {
+        const response = await fetch('https://your-backend-domain.com/api/createCheckoutSession', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ planId, userId }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Stripe Checkout sayfasına yönlendirme
+            window.location.href = data.sessionUrl;
+        } else {
+            console.error('Checkout Session Oluşturma Hatası:', data.message);
+            alert('Checkout Session Oluşturma Hatası: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Checkout Session Oluşturma Hatası:', error.message);
+        alert('Checkout Session Oluşturma Hatası: ' + error.message);
+    }
+}
 // Supabase bağlantısı
 const supabaseUrl = 'https://neijkzbyyqtwpmsvymip.supabase.co'; // Supabase URL'nizi buraya ekleyin
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laWpremJ5eXF0d3Btc3Z5bWlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA0NjY2NjAsImV4cCI6MjA0NjA0MjY2MH0.JiDT3kT_Ror6-AWFKTo9JJBQUC_ZQTPXOYJNpBlaaxQ'; // Supabase Anon Key'inizi buraya ekleyin
