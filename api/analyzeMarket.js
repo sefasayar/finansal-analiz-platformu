@@ -2,7 +2,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import fetch from 'node-fetch';
-import { RSI } from 'technicalindicators';
+import { RSI, MACD, SMA } from 'technicalindicators';
 
 // Supabase bağlantısı
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -27,42 +27,22 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Seçilen piyasanın ID'sini alma
-        const { data: marketData, error: marketError } = await supabase
-            .from('markets')
-            .select('*')
-            .eq('name', market)
-            .single();
+        // Paketlere göre sembolleri al
+        const symbols = await getSymbolsForPackage(market);
 
-        if (marketError) {
-            throw marketError;
-        }
-
-        // Piyasa içerisindeki pariteleri alma
-        const { data: pairs, error: pairsError } = await supabase
-            .from('pairs')
-            .select('*')
-            .eq('market_id', marketData.id);
-
-        if (pairsError) {
-            throw pairsError;
-        }
-
-        if (pairs.length === 0) {
-            return res.status(400).json({ message: 'No pairs found for the selected market' });
+        if (symbols.length === 0) {
+            return res.status(400).json({ message: 'No symbols found for the selected market' });
         }
 
         const analysisResults = [];
 
-        for (const pair of pairs) {
-            const symbol = pair.symbol;
-
+        for (const symbol of symbols) {
             // Alpha Vantage API'sinden veri çekme
             const alphaUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&outputsize=compact&apikey=${alphaVantageApiKey}`;
             const alphaResponse = await fetch(alphaUrl);
             if (!alphaResponse.ok) {
                 console.error(`Alpha Vantage API error for ${symbol}: ${alphaResponse.statusText}`);
-                continue; // Diğer paritelere geç
+                continue; // Diğer sembollere geç
             }
 
             const alphaData = await alphaResponse.json();
@@ -76,88 +56,100 @@ export default async function handler(req, res) {
 
             // Fiyat verilerini hazırlama
             const prices = Object.keys(timeSeries).map(date => ({
-                pair_id: pair.id,
                 date: date,
                 open: parseFloat(timeSeries[date]['1. open']),
                 high: parseFloat(timeSeries[date]['2. high']),
                 low: parseFloat(timeSeries[date]['3. low']),
                 close: parseFloat(timeSeries[date]['4. close']),
                 volume: parseInt(timeSeries[date]['6. volume'], 10),
-            }));
+            })).reverse(); // Tarih sırasını düzeltme
 
-            // Supabase'e fiyat verilerini ekleme (çakışmaları ignore et)
-            const { error: insertError } = await supabase
-                .from('pair_prices')
-                .insert(prices)
-                .onConflict(['pair_id', 'date'])
-                .ignore();
+            // Teknik göstergeleri hesaplama
+            const closePrices = prices.map(price => price.close);
 
-            if (insertError) {
-                console.error(`Error inserting prices for ${symbol}: ${insertError.message}`);
-                continue;
-            }
+            // Hareketli Ortalamalar
+            const ma50 = SMA.calculate({ period: 50, values: closePrices });
+            const ma200 = SMA.calculate({ period: 200, values: closePrices });
 
-            // Teknik analiz: RSI hesaplama
-            const closePrices = prices.map(price => price.close).reverse(); // Tarih sırasını düzeltme
-            const rsiInput = {
+            // MACD
+            const macdInput = {
                 values: closePrices,
-                period: 14,
+                fastPeriod: 12,
+                slowPeriod: 26,
+                signalPeriod: 9,
+                SimpleMAOscillator: false,
+                SimpleMASignal: false
             };
-            const rsiValues = RSI.calculate(rsiInput);
+            const macdValues = MACD.calculate(macdInput);
+
+            // RSI
+            const rsiValues = RSI.calculate({ values: closePrices, period: 14 });
+
+            // En son göstergeleri alma
+            const latestMA50 = ma50[ma50.length - 1];
+            const latestMA200 = ma200[ma200.length - 1];
+            const latestMACD = macdValues[macdValues.length - 1];
             const latestRSI = rsiValues[rsiValues.length - 1];
 
-            // Finnhub API'sinden sosyal duygu analizi yapma
-            const finnhubUrl = `https://finnhub.io/api/v1/news-sentiment?symbol=${symbol}&token=${finnhubApiKey}`;
-            const finnhubResponse = await fetch(finnhubUrl);
-            if (!finnhubResponse.ok) {
-                console.error(`Finnhub API error for ${symbol}: ${finnhubResponse.statusText}`);
-                continue;
+            // Sinyal üretme
+            let signal = 'Hold';
+            let signalsList = [];
+
+            // MA sinyali
+            if (latestMA50 > latestMA200) {
+                signalsList.push('Buy');
+            } else if (latestMA50 < latestMA200) {
+                signalsList.push('Sell');
             }
 
-            const finnhubData = await finnhubResponse.json();
-            const finnhubSentiment = finnhubData?.sentiment || 0; // Finnhub'dan alınan sentiment skoru
+            // MACD sinyali
+            if (latestMACD.MACD > latestMACD.signal) {
+                signalsList.push('Buy');
+            } else if (latestMACD.MACD < latestMACD.signal) {
+                signalsList.push('Sell');
+            }
 
-            // RSI ve duygu skoruna göre öneri hesaplama
-            let recommendation = 'Hold';
-            if (latestRSI < 30 && finnhubSentiment > 0) {
-                recommendation = 'Strong Buy';
-            } else if (latestRSI < 30) {
-                recommendation = 'Buy';
-            } else if (latestRSI > 70 && finnhubSentiment < 0) {
-                recommendation = 'Strong Sell';
+            // RSI sinyali
+            if (latestRSI < 30) {
+                signalsList.push('Buy');
             } else if (latestRSI > 70) {
-                recommendation = 'Sell';
+                signalsList.push('Sell');
             }
 
-            // Sonuçları Supabase'e kaydetme
-            const analysisDate = new Date().toISOString().split('T')[0];
-            const { data: analysisData, error: analysisError } = await supabase
-                .from('pair_analysis')
-                .upsert([
-                    {
-                        pair_id: pair.id,
-                        date: analysisDate,
-                        rsi: latestRSI,
-                        sentiment_score: finnhubSentiment,
-                        recommendation: recommendation
-                    }
-                ]);
+            // Sinyallerin kombinasyonu
+            const buySignals = signalsList.filter(s => s === 'Buy').length;
+            const sellSignals = signalsList.filter(s => s === 'Sell').length;
 
-            if (analysisError) {
-                console.error(`Error upserting analysis for ${symbol}: ${analysisError.message}`);
-                continue;
+            if (buySignals > sellSignals && buySignals >= 2) {
+                signal = 'Buy';
+            } else if (sellSignals > buySignals && sellSignals >= 2) {
+                signal = 'Sell';
             }
 
-            // Analiz sonucunu depolama
+            // Sonuçları depolama
             analysisResults.push({
                 symbol: symbol,
-                recommendation: recommendation,
+                date: prices[prices.length - 1].date,
+                signal: signal,
                 rsi: latestRSI,
-                sentiment_score: finnhubSentiment
+                macd: latestMACD.MACD,
+                textual_analysis: `${symbol} için en son sinyal: ${signal}. RSI değeri: ${latestRSI.toFixed(2)}. MACD değeri: ${latestMACD.MACD.toFixed(5)}.`
             });
+
+            // Supabase'e kaydetme
+            await supabase
+                .from('signals')
+                .upsert({
+                    symbol: symbol,
+                    package: market,
+                    date: prices[prices.length - 1].date,
+                    signal: signal,
+                    rsi: latestRSI,
+                    macd: latestMACD.MACD,
+                    textual_analysis: `${symbol} için en son sinyal: ${signal}. RSI değeri: ${latestRSI.toFixed(2)}. MACD değeri: ${latestMACD.MACD.toFixed(5)}.`,
+                });
         }
 
-        // Sonuçları frontend'e gönderme
         res.status(200).json({
             message: 'Data fetched and analyzed successfully',
             market: market,
@@ -168,4 +160,47 @@ export default async function handler(req, res) {
         console.error('Error in analyzeMarket:', error);
         res.status(500).json({ message: 'Internal Server Error', error: error.message });
     }
+}
+
+// Paketlere göre sembolleri getiren fonksiyonlar
+async function getSymbolsForPackage(packageName) {
+    let symbols = [];
+    if (packageName === 'Forex + Hisse Senedi') {
+        const forexSymbols = getMostTradedForexSymbols();
+        const stockSymbols = getMostTradedStockSymbols();
+        symbols = forexSymbols.concat(stockSymbols);
+    } else if (packageName === 'Profesyonel Vadeli İşlemler') {
+        symbols = getMostTradedFuturesSymbols();
+    } else if (packageName === 'Kripto Özel') {
+        symbols = getMostTradedCryptoSymbols();
+    }
+    return symbols;
+}
+
+function getMostTradedForexSymbols() {
+    return ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'USDCAD',
+            'USDCHF', 'NZDUSD', 'EURJPY', 'GBPJPY', 'EURGBP'];
+}
+
+function getMostTradedStockSymbols() {
+    return ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA',
+            'META', 'NVDA', 'BRK-B', 'JPM', 'JNJ'];
+}
+
+function getMostTradedFuturesSymbols() {
+    return ['GC=F',  // Altın
+            'CL=F',  // Ham Petrol
+            'ES=F',  // S&P 500 Futures
+            'NQ=F',  // Nasdaq 100 Futures
+            'YM=F',  // Dow Jones Futures
+            'RTY=F', // Russell 2000 Futures
+            'ZC=F',  // Mısır
+            'ZS=F',  // Soya Fasulyesi
+            'KE=F',  // Buğday
+            'NG=F']; // Doğal Gaz
+}
+
+function getMostTradedCryptoSymbols() {
+    return ['BTC-USD', 'ETH-USD', 'BNB-USD', 'USDT-USD', 'XRP-USD',
+            'ADA-USD', 'SOL-USD', 'DOGE-USD', 'DOT-USD', 'MATIC-USD'];
 }
