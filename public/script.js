@@ -1,19 +1,11 @@
 // script.js
 
-// script.js
-
 // Supabase bağlantısı
-<<<<<<< HEAD
 const supabaseUrl = 'https://neijkzbyyqtwpmsvymip.supabase.co'; // Supabase URL'nizi buraya ekleyin
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laWpremJ5eXF0d3Btc3Z5bWlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA0NjY2NjAsImV4cCI6MjA0NjA0MjY2MH0.JiDT3kT_Ror6-AWFKTo9JJBQUC_ZQTPXOYJNpBlaaxQ'; // Supabase Anon Key'inizi buraya ekleyin
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 console.log('Supabase Client Oluşturuldu:', supabaseClient);
-=======
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_ANON_KEY;
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
->>>>>>> ed55db3 (Ortam değişkenleri ve hata bildirimleri eklendi)
 
 // Kullanıcı Kayıt Olma Fonksiyonu
 async function signUp(email, password) {
@@ -26,11 +18,7 @@ async function signUp(email, password) {
         console.error('Kayıt Hatası:', error.message);
         alert('Kayıt Hatası: ' + error.message);
     } else {
-<<<<<<< HEAD
         console.log('Kullanıcı Kaydedildi:', data.user);
-=======
-        console.log('Kullanıcı Kaydedildi:', user);
->>>>>>> ed55db3 (Ortam değişkenleri ve hata bildirimleri eklendi)
         alert('Kayıt Başarılı! Lütfen e-posta adresinizi doğrulayın.');
     }
 }
@@ -46,52 +34,11 @@ async function signIn(email, password) {
         console.error('Giriş Hatası:', error.message);
         alert('Giriş Hatası: ' + error.message);
     } else {
-<<<<<<< HEAD
         console.log('Kullanıcı Giriş Yaptı:', data.user);
-=======
-        console.log('Kullanıcı Giriş Yaptı:', user);
->>>>>>> ed55db3 (Ortam değişkenleri ve hata bildirimleri eklendi)
         alert('Giriş Başarılı!');
     }
 }
 
-<<<<<<< HEAD
-=======
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('Finansal Analiz Platformu yüklendi.');
-
-    // Kayıt ve Giriş Butonlarına Event Listener Ekleme
-    const signUpButton = document.getElementById('sign-up');
-    const signInButton = document.getElementById('sign-in');
-
-    if (signUpButton) {
-        signUpButton.addEventListener('click', () => {
-            const email = prompt('E-posta adresinizi girin:');
-            const password = prompt('Şifrenizi girin:');
-            if (email && password) {
-                signUp(email, password);
-            } else {
-                alert('Lütfen geçerli bir e-posta ve şifre girin.');
-            }
-        });
-    }
-
-    if (signInButton) {
-        signInButton.addEventListener('click', () => {
-            const email = prompt('E-posta adresinizi girin:');
-            const password = prompt('Şifrenizi girin:');
-            if (email && password) {
-                signIn(email, password);
-            } else {
-                alert('Lütfen geçerli bir e-posta ve şifre girin.');
-            }
-        });
-    }
-});
-
-// script.js
-
->>>>>>> ed55db3 (Ortam değişkenleri ve hata bildirimleri eklendi)
 // Abonelik Satın Alma Fonksiyonu
 async function subscribeUser(planId) {
     console.log('Abonelik Satın Alma Fonksiyonu Çalıştırılıyor...');
@@ -135,6 +82,184 @@ async function subscribeUser(planId) {
     }
 }
 
+// Önerileri Görselleştirme Fonksiyonu
+async function displayRecommendations(packageName) {
+    try {
+        // Serverless fonksiyonunu çağırarak analiz verilerini çekme
+        const response = await fetch(`/api/analyzeMarket?market=${encodeURIComponent(packageName)}`, {
+            method: 'GET',
+        });
+
+        const result = await response.json();
+        if (!response.ok) {
+            alert('Veri çekme hatası: ' + result.message);
+            return;
+        }
+
+        // Recommendations Container'ını temizle
+        const recommendationsDiv = document.getElementById('recommendations');
+        recommendationsDiv.innerHTML = '';
+
+        if (result.analysis.length === 0) {
+            recommendationsDiv.innerHTML = '<p>Seçilen paket için analiz bulunamadı.</p>';
+        } else {
+            result.analysis.forEach(item => {
+                const recommendationCard = document.createElement('div');
+                recommendationCard.classList.add('recommendation-card');
+
+                if (item.signal === 'Buy') {
+                    recommendationCard.classList.add('strong-buy');
+                } else if (item.signal === 'Sell') {
+                    recommendationCard.classList.add('strong-sell');
+                }
+
+                recommendationCard.innerHTML = `
+                    <h3>${item.signal} Sinyali</h3>
+                    <p>Sembol: ${item.symbol}</p>
+                    <p>RSI: ${item.rsi.toFixed(2)}</p>
+                    <p>MACD: ${item.macd.toFixed(5)}</p>
+                    <p>${item.textual_analysis}</p>
+                `;
+
+                recommendationsDiv.appendChild(recommendationCard);
+            });
+        }
+
+        // Grafik oluşturma (isteğe bağlı)
+        // ...
+
+    } catch (error) {
+        console.error('Önerileri görüntüleme hatası:', error);
+        alert('Önerileri görüntüleme hatası: ' + error.message);
+    }
+}
+// DOMContentLoaded etkinliğinde güncellemeler
+document.addEventListener('DOMContentLoaded', () => {
+
+
+        // Recommendations Container'ını temizle
+        const recommendationsDiv = document.getElementById('recommendations');
+        recommendationsDiv.innerHTML = '';
+
+        if (result.analysis.length === 0) {
+            recommendationsDiv.innerHTML = '<p>Seçilen market için analiz bulunamadı.</p>';
+        } else {
+            result.analysis.forEach(pair => {
+                if (pair.recommendation === 'Strong Buy' || pair.recommendation === 'Strong Sell') {
+                    const recommendationCard = document.createElement('div');
+                    recommendationCard.classList.add('recommendation-card');
+
+                    if (pair.recommendation === 'Strong Buy') {
+                        recommendationCard.classList.add('strong-buy');
+                    } else if (pair.recommendation === 'Strong Sell') {
+                        recommendationCard.classList.add('strong-sell');
+                    }
+
+                    recommendationCard.innerHTML = `
+                        <h3>${pair.recommendation} Önerisi</h3>
+                        <p>Parite: ${pair.symbol}</p>
+                        <p>RSI: ${pair.rsi.toFixed(2)}</p>
+                        <p>Duygu Skoru: ${pair.sentiment_score.toFixed(2)}</p>
+                    `;
+
+                    recommendationsDiv.appendChild(recommendationCard);
+                }
+   // Paket Dropdown Event Listener
+    const marketDropdown = document.getElementById('market-dropdown');
+    marketDropdown.addEventListener('change', () => {
+        const selectedPackage = marketDropdown.value;
+        if (selectedPackage) {
+            displayRecommendations(selectedPackage);
+        } else {
+            // Clear recommendations and chart
+            const recommendationsDiv = document.getElementById('recommendations');
+            recommendationsDiv.innerHTML = '';
+            // Grafik temizleme işlemi...
+        }
+    });
+});
+            });
+
+            // Eğer hiç sinyal yoksa
+            if (!result.analysis.some(pair => pair.recommendation === 'Strong Buy' || pair.recommendation === 'Strong Sell')) {
+                recommendationsDiv.innerHTML = '<p>Şu anda güçlü al veya güçlü sat önerisi yok.</p>';
+            }
+        }
+
+        // Grafik için verileri toplama
+        const chartData = {};
+        result.analysis.forEach(pair => {
+            if (!chartData[pair.symbol]) {
+                chartData[pair.symbol] = { dates: [], rsi: [], sentiment: [] };
+            }
+            chartData[pair.symbol].dates.push(pair.date);
+            chartData[pair.symbol].rsi.push(pair.rsi);
+            chartData[pair.symbol].sentiment.push(pair.sentiment_score);
+        });
+
+        // Chart.js ile grafik oluşturma
+        const ctx = document.getElementById('stockChart').getContext('2d');
+        // Eğer önceki grafik varsa sil
+        if (window.stockChartInstance) {
+            window.stockChartInstance.destroy();
+        }
+
+        const datasets = [];
+        Object.keys(chartData).forEach(symbol => {
+            datasets.push({
+                label: `${symbol} RSI`,
+                data: chartData[symbol].rsi,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                fill: true,
+            });
+            datasets.push({
+                label: `${symbol} Duygu Skoru`,
+                data: chartData[symbol].sentiment,
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1,
+                fill: true,
+            });
+        });
+
+        window.stockChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: result.analysis.length > 0 ? result.analysis.map(pair => pair.date) : [],
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Tarih'
+                        }
+                    },
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Değerler'
+                        }
+                    }
+                }
+            }
+        });
+
+    } catch (error) {
+        console.error('Önerileri görüntüleme hatası:', error);
+        alert('Önerileri görüntüleme hatası: ' + error.message);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Finansal Analiz Platformu yüklendi.');
 
@@ -167,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (signupForm) {
         signupForm.addEventListener('submit', (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Sayfa yenilenmesini engelle
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
             signUp(email, password);
@@ -176,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (signinForm) {
         signinForm.addEventListener('submit', (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Sayfa yenilenmesini engelle
             const email = document.getElementById('signin-email').value;
             const password = document.getElementById('signin-password').value;
             signIn(email, password);
@@ -205,5 +330,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
             subscribeUser(planId);
         });
+    });
+
+    // Çarpı Butonlarına Event Listener Ekleme
+    const closeSignupButton = document.getElementById('close-signup');
+    const closeSigninButton = document.getElementById('close-signin');
+
+    if (closeSignupButton) {
+        closeSignupButton.addEventListener('click', () => {
+            authForms.style.display = 'none';
+            signupFormContainer.style.display = 'none';
+        });
+    }
+
+    if (closeSigninButton) {
+        closeSigninButton.addEventListener('click', () => {
+            authForms.style.display = 'none';
+            signinFormContainer.style.display = 'none';
+        });
+    }
+
+    // Market Dropdown Event Listener
+    const marketDropdown = document.getElementById('market-dropdown');
+    marketDropdown.addEventListener('change', () => {
+        const selectedMarket = marketDropdown.value;
+        if (selectedMarket) {
+            displayRecommendations(selectedMarket);
+        } else {
+            // Clear recommendations and chart
+            const recommendationsDiv = document.getElementById('recommendations');
+            recommendationsDiv.innerHTML = '';
+            if (window.stockChartInstance) {
+                window.stockChartInstance.destroy();
+            }
+        }
     });
 });
