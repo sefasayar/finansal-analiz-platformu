@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finansal Analiz Platformu | Piyasa Sinyalleri ve Stratejiler</title>
+    <meta name="description" content="Finansal Analiz Platformu ile piyasa trendlerini takip edin, doğru yatırım kararları alın ve finansal özgürlüğünüzü kazanın.">
+    <meta name="keywords" content="Finansal Analiz, Piyasa Sinyalleri, Yatırım Stratejileri, Abonelik Modelleri, Finansal Özgürlük">
+    <link rel="stylesheet" href="style.css">
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
+    <!-- GrapesJS CSS -->
+    <link href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <header>
+        <h1>Finansal Analiz Platformu</h1>
+        <nav>
+            <ul>
+                <li><a href="#">Ana Sayfa</a></li>
+                <li><a href="#">Hizmetler</a></li>
+                <li><a href="#">Abonelik Paketleri</a></li>
+                <li><a href="#">İletişim</a></li>
+                <li><button id="sign-up">Kayıt Ol</button></li>
+                <li><button id="sign-in">Giriş Yap</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- GrapesJS Editor -->
+        <div id="gjs" style="height:0px; overflow:hidden;">
+            <section id="hero">
+                <h2>Finansal Özgürlüğünüz İçin Analiz ve Sinyaller</h2>
+                <p>Abonelik modellerimizle piyasa trendlerini yakından takip edin, doğru yatırım kararları alın ve finansal özgürlüğünüzü kazanın.</p>
+                <a href="#packages" class="btn">Abonelik Paketlerini Görüntüle</a>
+            </section>
+            <!-- Diğer bölümler buraya gelecek -->
+        </div>
+
+        <!-- Kayıt ve Giriş Formları -->
+        <section id="auth-forms" style="display: none;">
+            <div class="form-container" id="signup-form" style="display: none;">
+                <h2>Kayıt Ol</h2>
+                <form id="signupForm">
+                    <label for="signup-email">E-posta:</label>
+                    <input type="email" id="signup-email" required>
+                    <label for="signup-password">Şifre:</label>
+                    <input type="password" id="signup-password" required>
+                    <button type="submit">Kayıt Ol</button>
+                </form>
+            </div>
+            <div class="form-container" id="signin-form" style="display: none;">
+                <h2>Giriş Yap</h2>
+                <form id="signinForm">
+                    <label for="signin-email">E-posta:</label>
+                    <input type="email" id="signin-email" required>
+                    <label for="signin-password">Şifre:</label>
+                    <input type="password" id="signin-password" required>
+                    <button type="submit">Giriş Yap</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Finansal Analiz Platformu. Tüm hakları saklıdır.</p>
+    </footer>
+
+    <!-- GrapesJS JS -->
+    <script src="https://unpkg.com/grapesjs"></script>
+    <script>
+        const editor = grapesjs.init({
+            container: '#gjs',
+            fromElement: true,
+            height: '100%',
+            width: 'auto',
+            storageManager: false,
+            plugins: ['gjs-blocks-basic'],
+            pluginsOpts: {
+                'gjs-blocks-basic': {}
+            }
+        });
+
+        // GrapesJS ile düzenlenen içeriği göstermek için
+        editor.on('change', () => {
+            document.getElementById('gjs').style.display = 'none';
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

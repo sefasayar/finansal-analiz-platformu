@@ -1,0 +1,144 @@
+header {
+    background: linear-gradient(135deg, #00203f, #1e2a78);
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #ffd700;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#hero {
+    background: linear-gradient(135deg, #1e2a78, #2c3e50);
+    padding: 60px 20px;
+    text-align: center;
+    border-radius: 20px;
+    margin: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+.btn {
+    display: inline-block;
+    padding: 15px 25px;
+    background-color: #ffd700;
+    color: #1e1e2f;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-top: 30px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #f7c900;
+    transform: translateY(-5px);
+}
+
+#about {
+    padding: 60px 20px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    margin: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+#packages {
+    padding: 60px 20px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    margin: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+.package {
+    background: linear-gradient(135deg, #2e3b55, #464e71);
+    color: white;
+    border: 1px solid #ffd700;
+    padding: 30px;
+    margin: 30px;
+    display: inline-block;
+    width: 270px;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.package:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.package h3 {
+    background: rgba(255, 215, 0, 0.2);
+    padding: 10px;
+    border-radius: 10px;
+    color: #ffd700;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.package p {
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+footer {
+    background: linear-gradient(135deg, #00203f, #1e2a78);
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    position: relative;
+    width: 100%;
+}
+
+.form-container {
+    background: linear-gradient(135deg, #fff, #d8e2dc);
+    color: #1e1e2f;
+    padding: 25px;
+    border-radius: 15px;
+    width: 350px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+#auth-forms {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+#auth-forms button {
+    background-color: #ffd700;
+    color: #1e1e2f;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#auth-forms button:hover {
+    background-color: #f7c900;
+}
+
+</style>: 100%;
+background-color: rgba(0, 0;
