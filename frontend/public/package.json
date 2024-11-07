@@ -1,0 +1,16 @@
+{
+  "name": "finansal-analiz-frontend",
+  "version": "1.0.0",
+  "description": "Finansal Analiz Platformu Frontend",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server public",
+    "build": "echo 'No build step required'"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  },
+  "author": "",
+  "license": "ISC"
+}
