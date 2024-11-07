@@ -4,8 +4,7 @@ body {
     padding: 0;
 }
 
-/* Navigasyon Menüsü Kaldırıldığı için İlgili Stiller Silindi */
-
+/* Hero Bölümü */
 #hero {
     background-color: #ecf0f1;
     padding: 50px 20px;
@@ -22,6 +21,7 @@ body {
     margin-bottom: 30px;
 }
 
+/* Buton Stilleri */
 .btn {
     display: inline-block;
     padding: 10px 20px;
@@ -30,12 +30,14 @@ body {
     text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+    cursor: pointer;
 }
 
 .btn:hover {
     background-color: #1f6391;
 }
 
+/* Paketler Bölümü */
 #packages {
     padding: 50px 20px;
     text-align: center;
@@ -47,6 +49,7 @@ body {
     margin: 20px;
     display: inline-block;
     width: 250px;
+    vertical-align: top;
     border-radius: 10px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -54,6 +57,25 @@ body {
 .package:hover {
     transform: translateY(-10px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.package h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.package p {
+    font-size: 16px;
+}
+
+.package ul {
+    text-align: left;
+    margin: 10px 0;
+    padding: 0 20px;
+}
+
+.package ul li {
+    margin-bottom: 5px;
 }
 
 .package .price {
@@ -96,4 +118,93 @@ footer {
     color: white;
     text-align: center;
     padding: 20px 0;
+}
+
+/* Modal Stilleri */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 400px;
+    position: relative;
+    border-radius: 10px;
+}
+
+.close-btn {
+    color: #aaa;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: black;
+}
+
+#auth-forms {
+    text-align: center;
+}
+
+#auth-forms input {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+#auth-forms button {
+    padding: 10px 20px;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#auth-forms button:hover {
+    background-color: #1e8449;
+}
+
+#auth-forms p {
+    margin-top: 15px;
+}
+
+#auth-forms a {
+    color: #2980b9;
+    text-decoration: none;
+}
+
+#auth-forms a:hover {
+    text-decoration: underline;
+}
+
+/* Performans İstatistikleri Bölümü */
+#performance {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+#performance h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+#performance p {
+    font-size: 18px;
+    margin-bottom: 30px;
 }
