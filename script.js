@@ -82,11 +82,11 @@ async function subscribeUser(planId) {
     }
 }
 
-// Güçlü Al ve Güçlü Sat Önerilerini Görselleştirme Fonksiyonu
-async function displayRecommendations(market) {
+// Önerileri Görselleştirme Fonksiyonu
+async function displayRecommendations(packageName) {
     try {
         // Serverless fonksiyonunu çağırarak analiz verilerini çekme
-        const response = await fetch(`/api/analyzeMarket?market=${market}`, {
+        const response = await fetch(`/api/analyzeMarket?market=${encodeURIComponent(packageName)}`, {
             method: 'GET',
         });
 
@@ -96,7 +96,46 @@ async function displayRecommendations(market) {
             return;
         }
 
-        console.log('API Yanıtı:', result);
+        // Recommendations Container'ını temizle
+        const recommendationsDiv = document.getElementById('recommendations');
+        recommendationsDiv.innerHTML = '';
+
+        if (result.analysis.length === 0) {
+            recommendationsDiv.innerHTML = '<p>Seçilen paket için analiz bulunamadı.</p>';
+        } else {
+            result.analysis.forEach(item => {
+                const recommendationCard = document.createElement('div');
+                recommendationCard.classList.add('recommendation-card');
+
+                if (item.signal === 'Buy') {
+                    recommendationCard.classList.add('strong-buy');
+                } else if (item.signal === 'Sell') {
+                    recommendationCard.classList.add('strong-sell');
+                }
+
+                recommendationCard.innerHTML = `
+                    <h3>${item.signal} Sinyali</h3>
+                    <p>Sembol: ${item.symbol}</p>
+                    <p>RSI: ${item.rsi.toFixed(2)}</p>
+                    <p>MACD: ${item.macd.toFixed(5)}</p>
+                    <p>${item.textual_analysis}</p>
+                `;
+
+                recommendationsDiv.appendChild(recommendationCard);
+            });
+        }
+
+        // Grafik oluşturma (isteğe bağlı)
+        // ...
+
+    } catch (error) {
+        console.error('Önerileri görüntüleme hatası:', error);
+        alert('Önerileri görüntüleme hatası: ' + error.message);
+    }
+}
+// DOMContentLoaded etkinliğinde güncellemeler
+document.addEventListener('DOMContentLoaded', () => {
+
 
         // Recommendations Container'ını temizle
         const recommendationsDiv = document.getElementById('recommendations');
@@ -125,6 +164,20 @@ async function displayRecommendations(market) {
 
                     recommendationsDiv.appendChild(recommendationCard);
                 }
+   // Paket Dropdown Event Listener
+    const marketDropdown = document.getElementById('market-dropdown');
+    marketDropdown.addEventListener('change', () => {
+        const selectedPackage = marketDropdown.value;
+        if (selectedPackage) {
+            displayRecommendations(selectedPackage);
+        } else {
+            // Clear recommendations and chart
+            const recommendationsDiv = document.getElementById('recommendations');
+            recommendationsDiv.innerHTML = '';
+            // Grafik temizleme işlemi...
+        }
+    });
+});
             });
 
             // Eğer hiç sinyal yoksa
