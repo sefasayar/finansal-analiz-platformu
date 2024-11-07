@@ -9,10 +9,11 @@
     <link rel="stylesheet" href="style.css">
     <!-- Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
-    <!-- Chart.js -->
+   <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    
     <header>
         <h1>Finansal Analiz Platformu</h1>
         <nav>
@@ -113,6 +114,23 @@
                 </form>
             </div>
         </section>
+   <!-- Piyasa Analizi Bölümü -->
+    <section id="analysis">
+        <h2>Market ve Parite Analizi</h2>
+        <div id="market-selector">
+            <label for="market-dropdown">Analiz Edilecek Paket:</label>
+            <select id="market-dropdown">
+                <option value="">-- Seçiniz --</option>
+                <option value="Forex + Hisse Senedi">Forex + Hisse Senedi</option>
+                <option value="Profesyonel Vadeli İşlemler">Profesyonel Vadeli İşlemler</option>
+                <option value="Kripto Özel">Kripto Özel</option>
+            </select>
+        </div>
+        <div id="recommendations" class="recommendations-container">
+            <!-- Dinamik olarak eklenen öneriler burada görüntülenecek -->
+        </div>
+        <canvas id="stockChart" width="400" height="200"></canvas>
+    </section>
     </main>
 
     <footer>
