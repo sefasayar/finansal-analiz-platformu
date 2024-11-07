@@ -7,7 +7,31 @@
 </head>
 <body>
     <!-- Navigasyon Menüsü Kaldırıldı -->
-    
+        <!-- Giriş/Kayıt Modalı -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div id="auth-forms">
+                <!-- Giriş Formu -->
+                <div id="login-form">
+                    <h2>Giriş Yap</h2>
+                    <input type="email" id="login-email" placeholder="E-posta">
+                    <input type="password" id="login-password" placeholder="Şifre">
+                    <button id="login-btn">Giriş Yap</button>
+                    <p>Hesabınız yok mu? <a href="#" id="show-register">Kayıt Ol</a></p>
+                </div>
+                <!-- Kayıt Formu -->
+                <div id="register-form" style="display: none;">
+                    <h2>Kayıt Ol</h2>
+                    <input type="text" id="register-name" placeholder="İsim">
+                    <input type="email" id="register-email" placeholder="E-posta">
+                    <input type="password" id="register-password" placeholder="Şifre">
+                    <button id="register-btn">Kayıt Ol</button>
+                    <p>Hesabınız var mı? <a href="#" id="show-login">Giriş Yap</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Hero Bölümü Güncellendi -->
     <section id="hero">
         <h1>Gizlilik ve Güvenilirlik ile Yatırımlarınızı Güvence Altına Alın</h1>
@@ -94,31 +118,7 @@
         <p>© 2024 Finansal Analiz Platformu. Tüm hakları saklıdır.</p>
     </footer>
 
-    <!-- Giriş/Kayıt Modalı -->
-    <div id="auth-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <div id="auth-forms">
-                <!-- Giriş Formu -->
-                <div id="login-form">
-                    <h2>Giriş Yap</h2>
-                    <input type="email" id="login-email" placeholder="E-posta">
-                    <input type="password" id="login-password" placeholder="Şifre">
-                    <button id="login-btn">Giriş Yap</button>
-                    <p>Hesabınız yok mu? <a href="#" id="show-register">Kayıt Ol</a></p>
-                </div>
-                <!-- Kayıt Formu -->
-                <div id="register-form" style="display: none;">
-                    <h2>Kayıt Ol</h2>
-                    <input type="text" id="register-name" placeholder="İsim">
-                    <input type="email" id="register-email" placeholder="E-posta">
-                    <input type="password" id="register-password" placeholder="Şifre">
-                    <button id="register-btn">Kayıt Ol</button>
-                    <p>Hesabınız var mı? <a href="#" id="show-login">Giriş Yap</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <!-- script.js Dosyası Dahil Edildi -->
     <script src="script.js"></script>
