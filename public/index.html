@@ -2,141 +2,65 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finansal Analiz Platformu | Piyasa Sinyalleri ve Stratejiler</title>
-    <meta name="description" content="Finansal Analiz Platformu ile piyasa trendlerini takip edin, doğru yatırım kararları alın ve finansal özgürlüğünüzü kazanın.">
-    <meta name="keywords" content="Finansal Analiz, Piyasa Sinyalleri, Yatırım Stratejileri, Abonelik Modelleri, Finansal Özgürlük">
+    <title>Finansal Analiz Platformu</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Supabase JS SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
-   <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    
     <header>
-        <h1>Finansal Analiz Platformu</h1>
-        <nav>
-            <ul>
-                <li><a href="#">Ana Sayfa</a></li>
-                <li><a href="#">Hizmetler</a></li>
-                <li><a href="#">Abonelik Paketleri</a></li>
-                <li><a href="#">İletişim</a></li>
-                <li><button id="sign-up">Kayıt Ol</button></li>
-                <li><button id="sign-in">Giriş Yap</button></li>
-            </ul>
-        </nav>
+        <!-- Navigasyon Menüsü Kaldırıldı -->
     </header>
 
-    <main>
-        <section id="hero">
-            <h2>Finansal Özgürlüğünüz İçin Analiz ve Sinyaller</h2>
-            <p>Abonelik modellerimizle piyasa trendlerini yakından takip edin, doğru yatırım kararları alın ve finansal özgürlüğünüzü kazanın.</p>
-            <a href="#packages" class="btn">Abonelik Paketlerini Görüntüle</a>
-        </section>
-
-        <section id="about">
-            <h2>Platform Hakkında</h2>
-            <p>Finansal Analiz Platformu, kullanıcılarına piyasa analizleri, sinyaller ve stratejiler sunarak finansal kararlarını desteklemeyi amaçlar. Kullanıcı dostu arayüzü ve güvenilir verileriyle, yatırımcıların doğru kararlar almasını sağlar.</p>
-            <p>Her seviyeden yatırımcı için uygun olan platformumuz, güncel piyasa verileri ve kapsamlı analizlerle finansal hedeflerinize ulaşmanıza yardımcı olur.</p>
-            <p>Platformumuzun sunduğu avantajlar:</p>
-            <ul>
-                <li><strong>Güncel Analizler:</strong> Piyasa hareketlerini gerçek zamanlı olarak takip edin.</li>
-                <li><strong>Güvenilir Sinyaller:</strong> Doğru ve güvenilir sinyallerle yatırım kararlarınızı destekleyin.</li>
-                <li><strong>Kolay Kullanım:</strong> Basit ve anlaşılır arayüzümüzle herkes için erişilebilir.</li>
-                <li><strong>Esnek Abonelik Modelleri:</strong> İhtiyacınıza uygun paketlerle finansal analizlerin tadını çıkarın.</li>
-            </ul>
-            <p>Finansal Analiz Platformu ile piyasaları daha iyi anlayın, riskleri minimize edin ve yatırımlarınızı optimize edin.</p>
-        </section>
-
-        <section id="packages">
-            <h2>Abonelik Paketleri</h2>
-            <div class="package">
-                <h3>Basic</h3>
-                <p>Temel piyasa analizleri ve günlük 2 bildirim ile finansal ihtiyaçlarınızı karşılayın.</p>
-                <p>Fiyat: <strong>$9/ay</strong></p>
-                <a href="#" class="btn">Satın Al</a>
-            </div>
-            <div class="package">
-                <h3>Silver</h3>
-                <p>Daha kapsamlı piyasa analizleri ve günlük 5 bildirim ile yatırım kararlarınızı güçlendirin.</p>
-                <p>Fiyat: <strong>$29/ay</strong></p>
-                <a href="#" class="btn">Satın Al</a>
-            </div>
-            <div class="package">
-                <h3>Platinum</h3>
-                <p>En kapsamlı piyasa analizleri ve sınırsız bildirim ile finansal stratejilerinizi en üst seviyeye taşıyın.</p>
-                <p>Fiyat: <strong>$59/ay</strong></p>
-                <a href="#" class="btn">Satın Al</a>
-            </div>
-        </section>
-
-        <!-- Piyasa Analizi Bölümü -->
-        <section id="analysis">
-            <h2>Market ve Parite Analizi</h2>
-            <div id="market-selector">
-                <label for="market-dropdown">Analiz Edilecek Market:</label>
-                <select id="market-dropdown">
-                    <option value="">-- Seçiniz --</option>
-                    <option value="Crypto">Crypto Market</option>
-                    <option value="Forex">Forex</option>
-                    <!-- Daha fazla piyasa ekleyebilirsiniz -->
-                </select>
-            </div>
-            <div id="recommendations" class="recommendations-container">
-                <!-- Dinamik olarak eklenen öneriler burada görüntülenecek -->
-            </div>
-            <canvas id="stockChart" width="400" height="200"></canvas>
-        </section>
-
-        <!-- Kayıt ve Giriş Formları -->
-        <section id="auth-forms" style="display: none;">
-            <div class="form-container" id="signup-form" style="display: none; position: relative;">
-                <button class="close-btn" id="close-signup">&times;</button>
-                <h2>Kayıt Ol</h2>
-                <form id="signupForm">
-                    <label for="signup-email">E-posta:</label>
-                    <input type="email" id="signup-email" required>
-                    <label for="signup-password">Şifre:</label>
-                    <input type="password" id="signup-password" required>
-                    <button type="submit">Kayıt Ol</button>
-                </form>
-            </div>
-            <div class="form-container" id="signin-form" style="display: none; position: relative;">
-                <button class="close-btn" id="close-signin">&times;</button>
-                <h2>Giriş Yap</h2>
-                <form id="signinForm">
-                    <label for="signin-email">E-posta:</label>
-                    <input type="email" id="signin-email" required>
-                    <label for="signin-password">Şifre:</label>
-                    <input type="password" id="signin-password" required>
-                    <button type="submit">Giriş Yap</button>
-                </form>
-            </div>
-        </section>
-   <!-- Piyasa Analizi Bölümü -->
-    <section id="analysis">
-        <h2>Market ve Parite Analizi</h2>
-        <div id="market-selector">
-            <label for="market-dropdown">Analiz Edilecek Paket:</label>
-            <select id="market-dropdown">
-                <option value="">-- Seçiniz --</option>
-                <option value="Forex + Hisse Senedi">Forex + Hisse Senedi</option>
-                <option value="Profesyonel Vadeli İşlemler">Profesyonel Vadeli İşlemler</option>
-                <option value="Kripto Özel">Kripto Özel</option>
-            </select>
-        </div>
-        <div id="recommendations" class="recommendations-container">
-            <!-- Dinamik olarak eklenen öneriler burada görüntülenecek -->
-        </div>
-        <canvas id="stockChart" width="400" height="200"></canvas>
+    <!-- Hero Bölümü Güncellendi -->
+    <section id="hero">
+        <h1>Doğruluk ve Güvenilirlik ile Finansal Başarıya Ulaşın</h1>
+        <p>Finansal Analiz Platformu olarak, size en doğru ve güvenilir piyasa analizlerini sunuyoruz. Gizliliğinize önem veriyor ve yatırımlarınızda en yüksek başarı oranını yakalamanız için çalışıyoruz.</p>
+        <a href="#packages" class="btn">Paketlerimizi İnceleyin</a>
     </section>
-    </main>
 
+    <!-- Müşteri Yorumları Eklendi -->
+    <section id="testimonials">
+        <h2>Müşteri Yorumları</h2>
+        <div class="testimonial">
+            <p>"This platform has significantly improved my trading decisions. The accuracy of the analysis is outstanding!"</p>
+            <h4>- John D., USA</h4>
+        </div>
+        <div class="testimonial">
+            <p>"¡Excelente servicio! Las señales son precisas y me han ayudado a maximizar mis ganancias."</p>
+            <h4>- María S., España</h4>
+        </div>
+        <div class="testimonial">
+            <p>"平台的分析非常专业，让我的投资更加有信心。"</p>
+            <h4>- Li Wei, China</h4>
+        </div>
+        <!-- Daha Fazla Yorum Ekleyebilirsiniz -->
+    </section>
+
+    <!-- Abonelik Paketleri Bölümü -->
+    <section id="packages">
+        <h2>Abonelik Paketleri</h2>
+        <div class="package">
+            <h3>Forex + Hisse Senedi</h3>
+            <p>En popüler döviz çiftleri ve hisse senetleri için analizler.</p>
+            <p class="price">₺199/ay</p>
+            <a href="#" class="btn">Satın Al</a>
+        </div>
+        <div class="package">
+            <h3>Profesyonel Vadeli İşlemler</h3>
+            <p>Vadeli işlemler piyasasında derinlemesine analizler.</p>
+            <p class="price">₺299/ay</p>
+            <a href="#" class="btn">Satın Al</a>
+        </div>
+        <div class="package">
+            <h3>Kripto Özel</h3>
+            <p>En popüler kripto paralar için özel analizler.</p>
+            <p class="price">₺249/ay</p>
+            <a href="#" class="btn">Satın Al</a>
+        </div>
+    </section>
+
+    <!-- Footer Bölümü -->
     <footer>
-        <p>&copy; 2024 Finansal Analiz Platformu. Tüm hakları saklıdır.</p>
+        <p>© 2024 Finansal Analiz Platformu. Tüm hakları saklıdır.</p>
     </footer>
-
-    <script src="script.js"></script>
 </body>
 </html>
