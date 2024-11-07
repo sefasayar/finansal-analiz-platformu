@@ -1,7 +1,8 @@
-// api/analyzeMarket.js
-
 import dotenv from 'dotenv';
 dotenv.config();
+
+import { createClient } from '@supabase/supabase-js';
+
 
 import { createClient } from '@supabase/supabase-js';
 import { RSI, MACD, SMA } from 'technicalindicators';
@@ -10,6 +11,7 @@ import { RSI, MACD, SMA } from 'technicalindicators';
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 
 // Alpha Vantage API anahtarı
 const alphaVantageApiKey = process.env.ALPHA_VANTAGE_API_KEY;
