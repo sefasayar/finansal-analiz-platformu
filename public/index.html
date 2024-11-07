@@ -6,55 +6,86 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <!-- Navigasyon Menüsü Kaldırıldı -->
-    </header>
-
+    <!-- Navigasyon Menüsü Kaldırıldı -->
+    
     <!-- Hero Bölümü Güncellendi -->
     <section id="hero">
-        <h1>Doğruluk ve Güvenilirlik ile Finansal Başarıya Ulaşın</h1>
-        <p>Finansal Analiz Platformu olarak, size en doğru ve güvenilir piyasa analizlerini sunuyoruz. Gizliliğinize önem veriyor ve yatırımlarınızda en yüksek başarı oranını yakalamanız için çalışıyoruz.</p>
+        <h1>Gizlilik ve Güvenilirlik ile Yatırımlarınızı Güvence Altına Alın</h1>
+        <p>Anonim algoritmalarımızla, finansal piyasalarda en doğru ve güvenilir sinyalleri elde edin. Güvenlik ve gizliliğin ön planda olduğu platformumuzda, yüksek başarı oranıyla yatırımlarınızı büyütün.</p>
         <a href="#packages" class="btn">Paketlerimizi İnceleyin</a>
     </section>
 
-    <!-- Müşteri Yorumları Eklendi -->
-    <section id="testimonials">
-        <h2>Müşteri Yorumları</h2>
-        <div class="testimonial">
-            <p>"This platform has significantly improved my trading decisions. The accuracy of the analysis is outstanding!"</p>
-            <h4>- John D., USA</h4>
-        </div>
-        <div class="testimonial">
-            <p>"¡Excelente servicio! Las señales son precisas y me han ayudado a maximizar mis ganancias."</p>
-            <h4>- María S., España</h4>
-        </div>
-        <div class="testimonial">
-            <p>"平台的分析非常专业，让我的投资更加有信心。"</p>
-            <h4>- Li Wei, China</h4>
-        </div>
-        <!-- Daha Fazla Yorum Ekleyebilirsiniz -->
+    <!-- Performans İstatistikleri Bölümü Eklendi -->
+    <section id="performance">
+        <h2>Performans İstatistikleri</h2>
+        <p>Algoritmalarımızın geçmiş performansı ve başarı oranlarıyla ilgili şeffaf bilgi sunuyoruz. Ortalama %85 başarı oranıyla, yatırımlarınızı güvenle yönetebilirsiniz.</p>
+        <!-- Buraya grafikler veya istatistikler eklenebilir -->
     </section>
 
-    <!-- Abonelik Paketleri Bölümü -->
+    <!-- Abonelik Paketleri Bölümü Güncellendi -->
     <section id="packages">
         <h2>Abonelik Paketleri</h2>
         <div class="package">
-            <h3>Forex + Hisse Senedi</h3>
-            <p>En popüler döviz çiftleri ve hisse senetleri için analizler.</p>
+            <h3>Forex + Hisse Senedi Paketi</h3>
+            <p>Global forex piyasaları ve yüksek likiditeli hisse senetleri için algoritmik sinyaller. Temel ve teknik analiz kombinasyonlarıyla yüksek güvenilirlik.</p>
+            <ul>
+                <li>En popüler döviz çiftleri</li>
+                <li>ABD ve Avrupa hisse senetleri</li>
+                <li>Günlük ve haftalık analizler</li>
+            </ul>
             <p class="price">₺199/ay</p>
-            <a href="#" class="btn">Satın Al</a>
+            <a href="#" class="btn buy-btn" data-package="Forex + Hisse Senedi Paketi">Satın Al</a>
         </div>
         <div class="package">
-            <h3>Profesyonel Vadeli İşlemler</h3>
-            <p>Vadeli işlemler piyasasında derinlemesine analizler.</p>
+            <h3>Profesyonel Vadeli İşlemler Paketi</h3>
+            <p>Emtia ve endeks vadeli işlemlerinde derinlemesine analizler. Trend ve volatiliteye dayalı algoritmalarla profesyonel yatırımcılara özel sinyaller.</p>
+            <ul>
+                <li>Altın, petrol gibi likit emtialar</li>
+                <li>Büyük endeks vadeli işlemleri</li>
+                <li>Anlık piyasa güncellemeleri</li>
+            </ul>
             <p class="price">₺299/ay</p>
-            <a href="#" class="btn">Satın Al</a>
+            <a href="#" class="btn buy-btn" data-package="Profesyonel Vadeli İşlemler Paketi">Satın Al</a>
         </div>
         <div class="package">
-            <h3>Kripto Özel</h3>
-            <p>En popüler kripto paralar için özel analizler.</p>
+            <h3>Kripto Özel Paketi</h3>
+            <p>Bitcoin ve Ethereum gibi büyük kripto paralar için kısa vadeli ve yüksek riskli sinyaller. Volatiliteye dayalı algoritmalarla kripto piyasasında fırsatları yakalayın.</p>
+            <ul>
+                <li>Popüler kripto para analizleri</li>
+                <li>Hızlı al-sat sinyalleri</li>
+                <li>24/7 piyasa takibi</li>
+            </ul>
             <p class="price">₺249/ay</p>
-            <a href="#" class="btn">Satın Al</a>
+            <a href="#" class="btn buy-btn" data-package="Kripto Özel Paketi">Satın Al</a>
+        </div>
+        <!-- Deneme Paketi Eklendi -->
+        <div class="package">
+            <h3>Deneme Paketi</h3>
+            <p>Algoritmalarımızın kalitesini deneyimleyin. Sınırlı süreli ücretsiz deneme fırsatı.</p>
+            <ul>
+                <li>Seçili piyasalarda sinyaller</li>
+                <li>Sınırlı erişim</li>
+                <li>Hiçbir ücret yok</li>
+            </ul>
+            <p class="price">Ücretsiz</p>
+            <a href="#" class="btn buy-btn" data-package="Deneme Paketi">Deneyin</a>
+        </div>
+    </section>
+
+    <!-- Müşteri Yorumları Bölümü -->
+    <section id="testimonials">
+        <h2>Müşteri Yorumları</h2>
+        <div class="testimonial">
+            <p>"Bu platform, işlem kararlarımı önemli ölçüde geliştirdi. Analizlerin doğruluğu muhteşem!"</p>
+            <h4>- John D., ABD</h4>
+        </div>
+        <div class="testimonial">
+            <p>"¡Excelente servicio! Las señales son precisas y me han ayudado a maximizar mis ganancias."</p>
+            <h4>- María S., İspanya</h4>
+        </div>
+        <div class="testimonial">
+            <p>"平台的分析非常专业，让我的投资更加有信心。"</p>
+            <h4>- Li Wei, Çin</h4>
         </div>
     </section>
 
@@ -62,5 +93,34 @@
     <footer>
         <p>© 2024 Finansal Analiz Platformu. Tüm hakları saklıdır.</p>
     </footer>
+
+    <!-- Giriş/Kayıt Modalı -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div id="auth-forms">
+                <!-- Giriş Formu -->
+                <div id="login-form">
+                    <h2>Giriş Yap</h2>
+                    <input type="email" id="login-email" placeholder="E-posta">
+                    <input type="password" id="login-password" placeholder="Şifre">
+                    <button id="login-btn">Giriş Yap</button>
+                    <p>Hesabınız yok mu? <a href="#" id="show-register">Kayıt Ol</a></p>
+                </div>
+                <!-- Kayıt Formu -->
+                <div id="register-form" style="display: none;">
+                    <h2>Kayıt Ol</h2>
+                    <input type="text" id="register-name" placeholder="İsim">
+                    <input type="email" id="register-email" placeholder="E-posta">
+                    <input type="password" id="register-password" placeholder="Şifre">
+                    <button id="register-btn">Kayıt Ol</button>
+                    <p>Hesabınız var mı? <a href="#" id="show-login">Giriş Yap</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- script.js Dosyası Dahil Edildi -->
+    <script src="script.js"></script>
 </body>
 </html>
