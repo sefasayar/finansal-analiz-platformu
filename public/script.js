@@ -36,6 +36,7 @@ async function signIn(email, password) {
     } else {
         console.log('Kullanıcı Giriş Yaptı:', data.user);
         alert('Giriş Başarılı!');
+        // Kullanıcı giriş yaptıktan sonra ek işlemler yapabilirsiniz
     }
 }
 
@@ -44,27 +45,21 @@ async function subscribeUser(planId) {
     console.log('Abonelik Satın Alma Fonksiyonu Çalıştırılıyor...');
     const { data, error } = await supabaseClient.auth.getUser();
 
-    if (error) {
-        console.error('Kullanıcı Bilgisi Alınamadı:', error.message);
-        alert('Kullanıcı bilgisi alınamadı: ' + error.message);
+    if (error || !data.user) {
+        console.error('Kullanıcı Bilgisi Alınamadı:', error ? error.message : 'Giriş yapılmamış');
+        alert('Lütfen önce giriş yapın.');
         return;
     }
 
     const user = data.user;
 
-    if (!user) {
-        console.error('Kullanıcı giriş yapmamış.');
-        alert('Lütfen önce giriş yapın.');
-        return;
-    }
-
     try {
         const response = await fetch('/api/subscribe', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ userId: user.id, planId: planId }),
+            body: JSON.stringify({ userId: user.id, planId: planId })
         });
 
         const responseData = await response.json();
@@ -126,133 +121,7 @@ async function displayRecommendations(packageName) {
         }
 
         // Grafik oluşturma (isteğe bağlı)
-        // ...
-
-    } catch (error) {
-        console.error('Önerileri görüntüleme hatası:', error);
-        alert('Önerileri görüntüleme hatası: ' + error.message);
-    }
-}
-// DOMContentLoaded etkinliğinde güncellemeler
-document.addEventListener('DOMContentLoaded', () => {
-
-
-        // Recommendations Container'ını temizle
-        const recommendationsDiv = document.getElementById('recommendations');
-        recommendationsDiv.innerHTML = '';
-
-        if (result.analysis.length === 0) {
-            recommendationsDiv.innerHTML = '<p>Seçilen market için analiz bulunamadı.</p>';
-        } else {
-            result.analysis.forEach(pair => {
-                if (pair.recommendation === 'Strong Buy' || pair.recommendation === 'Strong Sell') {
-                    const recommendationCard = document.createElement('div');
-                    recommendationCard.classList.add('recommendation-card');
-
-                    if (pair.recommendation === 'Strong Buy') {
-                        recommendationCard.classList.add('strong-buy');
-                    } else if (pair.recommendation === 'Strong Sell') {
-                        recommendationCard.classList.add('strong-sell');
-                    }
-
-                    recommendationCard.innerHTML = `
-                        <h3>${pair.recommendation} Önerisi</h3>
-                        <p>Parite: ${pair.symbol}</p>
-                        <p>RSI: ${pair.rsi.toFixed(2)}</p>
-                        <p>Duygu Skoru: ${pair.sentiment_score.toFixed(2)}</p>
-                    `;
-
-                    recommendationsDiv.appendChild(recommendationCard);
-                }
-   // Paket Dropdown Event Listener
-    const marketDropdown = document.getElementById('market-dropdown');
-    marketDropdown.addEventListener('change', () => {
-        const selectedPackage = marketDropdown.value;
-        if (selectedPackage) {
-            displayRecommendations(selectedPackage);
-        } else {
-            // Clear recommendations and chart
-            const recommendationsDiv = document.getElementById('recommendations');
-            recommendationsDiv.innerHTML = '';
-            // Grafik temizleme işlemi...
-        }
-    });
-});
-            });
-
-            // Eğer hiç sinyal yoksa
-            if (!result.analysis.some(pair => pair.recommendation === 'Strong Buy' || pair.recommendation === 'Strong Sell')) {
-                recommendationsDiv.innerHTML = '<p>Şu anda güçlü al veya güçlü sat önerisi yok.</p>';
-            }
-        }
-
-        // Grafik için verileri toplama
-        const chartData = {};
-        result.analysis.forEach(pair => {
-            if (!chartData[pair.symbol]) {
-                chartData[pair.symbol] = { dates: [], rsi: [], sentiment: [] };
-            }
-            chartData[pair.symbol].dates.push(pair.date);
-            chartData[pair.symbol].rsi.push(pair.rsi);
-            chartData[pair.symbol].sentiment.push(pair.sentiment_score);
-        });
-
-        // Chart.js ile grafik oluşturma
-        const ctx = document.getElementById('stockChart').getContext('2d');
-        // Eğer önceki grafik varsa sil
-        if (window.stockChartInstance) {
-            window.stockChartInstance.destroy();
-        }
-
-        const datasets = [];
-        Object.keys(chartData).forEach(symbol => {
-            datasets.push({
-                label: `${symbol} RSI`,
-                data: chartData[symbol].rsi,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                fill: true,
-            });
-            datasets.push({
-                label: `${symbol} Duygu Skoru`,
-                data: chartData[symbol].sentiment,
-                backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                borderColor: 'rgba(153, 102, 255, 1)',
-                borderWidth: 1,
-                fill: true,
-            });
-        });
-
-        window.stockChartInstance = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: result.analysis.length > 0 ? result.analysis.map(pair => pair.date) : [],
-                datasets: datasets
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'day'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Tarih'
-                        }
-                    },
-                    y: {
-                        beginAtZero: false,
-                        title: {
-                            display: true,
-                            text: 'Değerler'
-                        }
-                    }
-                }
-            }
-        });
+        // Burada Chart.js veya başka bir kütüphane kullanarak grafik oluşturabilirsiniz
 
     } catch (error) {
         console.error('Önerileri görüntüleme hatası:', error);
@@ -260,109 +129,80 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 }
 
+// DOMContentLoaded etkinliğinde Event Listener'lar
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Finansal Analiz Platformu yüklendi.');
 
-    // Kayıt ve Giriş Butonlarına Event Listener Ekleme
-    const signUpButton = document.getElementById('sign-up');
-    const signInButton = document.getElementById('sign-in');
-    const authForms = document.getElementById('auth-forms');
-    const signupFormContainer = document.getElementById('signup-form');
-    const signinFormContainer = document.getElementById('signin-form');
-    const signupForm = document.getElementById('signupForm');
-    const signinForm = document.getElementById('signinForm');
-
-    if (signUpButton) {
-        signUpButton.addEventListener('click', () => {
-            console.log('Kayıt Ol Butonuna Tıklandı.');
-            authForms.style.display = 'flex'; // Flex for centering
-            signupFormContainer.style.display = 'block';
-            signinFormContainer.style.display = 'none';
-        });
-    }
-
-    if (signInButton) {
-        signInButton.addEventListener('click', () => {
-            console.log('Giriş Yap Butonuna Tıklandı.');
-            authForms.style.display = 'flex'; // Flex for centering
-            signinFormContainer.style.display = 'block';
-            signupFormContainer.style.display = 'none';
-        });
-    }
-
-    if (signupForm) {
-        signupForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Sayfa yenilenmesini engelle
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-            signUp(email, password);
-        });
-    }
-
-    if (signinForm) {
-        signinForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Sayfa yenilenmesini engelle
-            const email = document.getElementById('signin-email').value;
-            const password = document.getElementById('signin-password').value;
-            signIn(email, password);
-        });
-    }
-
-    // Abonelik butonlarına event listener ekleme
-    document.querySelectorAll('.package .btn').forEach(button => {
-        button.addEventListener('click', () => {
-            const planName = button.parentElement.querySelector('h3').innerText;
-            let planId;
-
-            switch (planName) {
-                case 'Basic':
-                    planId = 1;
-                    break;
-                case 'Silver':
-                    planId = 2;
-                    break;
-                case 'Platinum':
-                    planId = 3;
-                    break;
-                default:
-                    console.error('Bilinmeyen Abonelik Paketi');
-            }
-
-            subscribeUser(planId);
+    // "Satın Al" Butonlarına Event Listener Ekleme
+    const buyButtons = document.querySelectorAll('.buy-btn');
+    buyButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            const selectedPackage = button.getAttribute('data-package');
+            console.log('Seçilen Paket:', selectedPackage);
+            // Giriş kontrolü yapabilir ve abonelik işlemini başlatabilirsiniz
+            subscribeUser(selectedPackage);
         });
     });
 
-    // Çarpı Butonlarına Event Listener Ekleme
-    const closeSignupButton = document.getElementById('close-signup');
-    const closeSigninButton = document.getElementById('close-signin');
+    // Giriş ve Kayıt Formları Arasında Geçiş
+    const showRegisterLink = document.getElementById('show-register');
+    const showLoginLink = document.getElementById('show-login');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
 
-    if (closeSignupButton) {
-        closeSignupButton.addEventListener('click', () => {
-            authForms.style.display = 'none';
-            signupFormContainer.style.display = 'none';
-        });
-    }
+    showRegisterLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+    });
 
-    if (closeSigninButton) {
-        closeSigninButton.addEventListener('click', () => {
-            authForms.style.display = 'none';
-            signinFormContainer.style.display = 'none';
-        });
-    }
+    showLoginLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        registerForm.style.display = 'none';
+        loginForm.style.display = 'block';
+    });
+
+    // Giriş ve Kayıt Butonlarına Event Listener Ekleme
+    document.getElementById('login-btn').addEventListener('click', () => {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        signIn(email, password);
+    });
+
+    document.getElementById('register-btn').addEventListener('click', () => {
+        const email = document.getElementById('register-email').value;
+        const password = document.getElementById('register-password').value;
+        signUp(email, password);
+    });
+
+    // Modal Kapatma İşlemi
+    const modal = document.getElementById('auth-modal');
+    const closeBtn = document.querySelector('.close-btn');
+    closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    // Modal Dışına Tıklanınca Kapatma
+    window.addEventListener('click', (e) => {
+        if (e.target == modal) {
+            modal.style.display = 'none';
+        }
+    });
 
     // Market Dropdown Event Listener
     const marketDropdown = document.getElementById('market-dropdown');
-    marketDropdown.addEventListener('change', () => {
-        const selectedMarket = marketDropdown.value;
-        if (selectedMarket) {
-            displayRecommendations(selectedMarket);
-        } else {
-            // Clear recommendations and chart
-            const recommendationsDiv = document.getElementById('recommendations');
-            recommendationsDiv.innerHTML = '';
-            if (window.stockChartInstance) {
-                window.stockChartInstance.destroy();
+    if (marketDropdown) {
+        marketDropdown.addEventListener('change', () => {
+            const selectedPackage = marketDropdown.value;
+            if (selectedPackage) {
+                displayRecommendations(selectedPackage);
+            } else {
+                // Önerileri ve grafikleri temizleme
+                const recommendationsDiv = document.getElementById('recommendations');
+                recommendationsDiv.innerHTML = '';
+                // Grafik temizleme işlemi (eğer varsa)
             }
-        }
-    });
+        });
+    }
 });
