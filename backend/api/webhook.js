@@ -2,6 +2,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import Stripe from 'stripe';
+import getRawBody from 'raw-body';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -13,13 +14,20 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2023-08-16',
 });
 
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 export default async function handler(req, res) {
   const sig = req.headers['stripe-signature'];
 
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+    const buf = await getRawBody(req);
+    event = stripe.webhooks.constructEvent(buf, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
     console.error('Webhook signature verification failed:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
@@ -63,10 +71,3 @@ export default async function handler(req, res) {
   // Return a response to acknowledge receipt of the event
   res.json({ received: true });
 }
-
-// Vercel'de Webhook Body Parsing'i devre dışı bırakın
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
