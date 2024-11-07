@@ -1,4 +1,7 @@
 {
+  "buildCommand": "next build"
+}
+{
   "version": 2,
   "builds": [
     {
