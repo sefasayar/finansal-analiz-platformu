@@ -1,10 +1,10 @@
+// api/analyzeMarket.js
+
 import dotenv from 'dotenv';
 dotenv.config();
 
-// api/analyzeMarket.js
-
 import { createClient } from '@supabase/supabase-js';
-// 'node-fetch' importunu kaldırdık
+import { RSI, MACD, SMA } from 'technicalindicators';
 
 // Supabase bağlantısı
 const supabaseUrl = process.env.SUPABASE_URL;
