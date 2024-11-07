@@ -1,12 +1,9 @@
 {
-  "buildCommand": "next build"
-}
-{
   "version": 2,
   "builds": [
     {
       "src": "api/**/*.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node@2"
     },
     {
       "src": "public/**/*",
@@ -14,10 +11,6 @@
     }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1.js"
-    },
     {
       "handle": "filesystem"
     },
